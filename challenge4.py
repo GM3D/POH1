@@ -1,8 +1,6 @@
 def search_nonzero_downward(start, histgram):
     for i in xrange(start, 10, -1):
-        if histgram[i] == 0:
-            continue
-        else:
+        if histgram[i]:
             return i
     return -1
 
