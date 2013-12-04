@@ -2,8 +2,8 @@ import copy
 import random
 import subprocess
 
-scripts = (('python', './challenge1.py'),
-           ('python', './challenge4.py'))
+scripts = (('python', './challenge4.py'),
+           ('python', './challenge5.py'))
 
 def gen_data(N, D):
     print "N, D = %d, %d" % (N, D)
