@@ -3,7 +3,7 @@ import random
 import subprocess
 
 scripts = (('python', './challenge4.py'),
-           ('./challenge2-c'))
+           ('python', './ctypes1.py'))
 
 def gen_data(N, D):
     print "N, D = %d, %d" % (N, D)
@@ -30,7 +30,7 @@ countmax = 10
 for count in xrange(countmax):
     print "test run %d of %d" % (count + 1, countmax)
     output = []
-    for k in xrange(0, 4): # (0, 7) takes too long!
+    for k in xrange(0, 7): # (0, 7) takes too long!
         N = 10 ** k
         D = random.randrange(1, 76)
         data = gen_data(N, D)

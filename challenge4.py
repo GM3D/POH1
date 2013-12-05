@@ -1,5 +1,5 @@
 def search_nonzero_downward(start, histgram):
-    for i in xrange(start, 10, -1):
+    for i in xrange(start, 9, -1):
         if histgram[i]:
             return i
     return -1
@@ -7,7 +7,7 @@ def search_nonzero_downward(start, histgram):
 
 header = raw_input().rstrip().split(' ')
 N, D = int(header[0]), int(header[1])
-p_hist = 1000000 * [0]
+p_hist = 1000001 * [0]
 for i in xrange(N):
     price = int(raw_input().rstrip())
     p_hist[price] += 1
