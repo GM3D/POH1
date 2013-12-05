@@ -3,7 +3,7 @@ import random
 import subprocess
 
 scripts = (('python', './challenge4.py'),
-           ('python', './challenge5.py'))
+           ('./challenge2-c'))
 
 def gen_data(N, D):
     print "N, D = %d, %d" % (N, D)
@@ -22,8 +22,10 @@ def compare_outputs(output):
     o1 = output[0].split('\n')
     o2 = output[1].split('\n')
     for i in xrange(len(o1)):
-        assert o1[i] == o2[i]
-
+        try:
+            assert o1[i] == o2[i]
+        except AssertionError:
+            print "i = %s, o1[i] = %s, o2[i] = %s" % (i, o1[i], o2[i])
 countmax = 10
 for count in xrange(countmax):
     print "test run %d of %d" % (count + 1, countmax)

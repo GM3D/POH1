@@ -14,6 +14,7 @@ for i in xrange(N):
 cprices = []
 for i in xrange(D):
     cprices.append(int(raw_input().rstrip()))
+
 for day in xrange(D):
     candidate = 0
     cp = cprices[day]
