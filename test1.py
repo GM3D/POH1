@@ -2,7 +2,7 @@ import copy
 import random
 import subprocess
 
-scripts = (('python', './challenge4.py'),
+scripts = (('python', './challenge6.py'),
            ('python', './ctypes1.py'))
 
 def gen_data(N, D):

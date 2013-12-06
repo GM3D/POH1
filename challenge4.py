@@ -21,11 +21,13 @@ for day in xrange(D):
     larger = cp - 10
     while True:
         larger = search_nonzero_downward(larger - 1, p_hist)
+#        print "larger = ", larger
         if larger < cp / 2 or larger < 10:
             break
         p_hist[larger] -= 1
         smaller = search_nonzero_downward(cp - larger, p_hist)
         p_hist[larger] += 1
+#        print "smaller = ", smaller
         if smaller < 10:
             continue
         if smaller + larger > candidate:
