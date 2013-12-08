@@ -95,12 +95,13 @@ int main(int argc, char **argv){
       /* } */
       /* larger = i; */
       if(larger < cp / 2 || larger < minimum) break;
-      p_hist[larger]--;
-      for(i = cp - larger; i >= minimum; i--){
-	if(p_hist[i]) break;
-      }
-      smaller = i;
-      p_hist[larger]++;
+      /* p_hist[larger]--; */
+      /* for(i = cp - larger; i >= minimum; i--){ */
+      /* 	if(p_hist[i]) break; */
+      /* } */
+      /* smaller = i; */
+      /* p_hist[larger]++; */
+      smaller = next_lower[cp - larger]
       if(smaller < minimum) continue;
       if(smaller + larger > candidate){
 	candidate = smaller + larger;

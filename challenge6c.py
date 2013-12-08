@@ -88,6 +88,6 @@ for day in xrange(D):
 
 t[8] = datetime.now()
 
-for i in range(8):
+for i in xrange(8):
     sys.stderr.write("t[%d] - t[%d] = %d us.\n" % 
                      (i + 1, i, (t[i + 1] - t[i]).microseconds))

@@ -1,12 +1,6 @@
 million = 1000000
-test1_output = """0
-14000
-10000"""
 header = raw_input().rstrip().split(' ')
 N, D = int(header[0]), int(header[1])
-if N == 4 and D == 3:
-    print test1_output
-    raise SystemExit
 p_hist = (million + 1) * [0]
 for i in xrange(N):
     price = int(raw_input().rstrip())
@@ -24,6 +18,7 @@ for i in xrange(million + 1):
         offset = 0
     offset += 1
 
+best_price = {}
 for day in xrange(D):
     candidate = 0
     lowest_price = 10
@@ -46,4 +41,7 @@ for day in xrange(D):
         if smaller + larger > candidate:
             candidate = smaller + larger
         larger -= next_lower[larger]
-    print candidate
+    best_price[cp] = candidate
+
+for day in xrange(D):
+    print best_price[cprices[day]]
