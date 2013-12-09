@@ -2,7 +2,7 @@ import copy
 import random
 import subprocess
 
-scripts = (('python', 'challenge6.py'),
+scripts = (('./challenge3-cpp'),
            ('python', 'challenge8.py'))
 
 def gen_data(N, D):
@@ -47,7 +47,7 @@ for count in xrange(countmax):
                                  stdout=subprocess.PIPE)
             child_output = p.communicate(data)[0]
             if p.poll() != 0:
-                print scripts[i][1] + "didn't end correctly."
+                print str(scripts[i]) + "didn't end correctly."
                 p.terminate()
             output.append(copy.deepcopy(child_output))
         compare_outputs(output)
