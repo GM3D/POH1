@@ -44,7 +44,7 @@ log
 testMemoryBuffer
 challenge*-c
 *.time*
-data2.txt
 speedcheck
 *-cpp
 *-c
+*.txt

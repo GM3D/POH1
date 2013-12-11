@@ -6,12 +6,21 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <unistd.h>
 #include <stdexcept>
+
+
 
 #define likely(x)       __builtin_expect((x),1)
 #define unlikely(x)     __builtin_expect((x),0)
 
 using namespace std;
+
+const int lowest_price = 10;
+const int million = 1000*1000;
+const int bufsize = 8192 * 1000;
+char buf[bufsize];
+int count_and_offset[million + 1];
 
 /// used for sorting.
 int compare(const void *a, const void *b)
@@ -21,17 +30,16 @@ int compare(const void *a, const void *b)
 
 class Campaign {
 private:
-  const int lowest_price;
-  const int million;
   int N, D;
   int num_unique;
   vector<int> price_list; /// list of item prices
-  vector<int> multiplicity; /// how many items for a given count
+  //  vector<int> count_and_offset; /// how many items for a given count
   vector<int> cprices; /// campaign prices list.
   vector<int> cp_sorted; /// same list as cprices, but sorted.
   map<int, int> best_price; /// record best solution for each campaign price.
   inline  int find_best_price(int cp); /// main algorithm
-  void sort_data();
+  inline char *get_line();
+  void precompute();
 public:
   Campaign();
   ~Campaign();
@@ -44,13 +52,12 @@ public:
 };
 
 Campaign::Campaign()
-  : lowest_price(10), million(1000000),
-    N(0), D(0), num_unique(1),
-    price_list(vector<int>()),
-    multiplicity(vector<int>(million + 1, 0)),
-    cprices(vector<int>()),
-    cp_sorted(vector<int>()),
-    best_price(map<int, int>())
+  :N(0), D(0), num_unique(1),
+   price_list(vector<int>()),
+   //   count_and_offset(vector<int>(million + 1, 0)),
+   cprices(vector<int>()),
+   cp_sorted(vector<int>()),
+   best_price(map<int, int>())
 {
 }
 
@@ -58,19 +65,30 @@ Campaign::~Campaign()
 {
 }
 
+inline char *Campaign::get_line()
+{
+  static char* ptr = buf;
+  char *p = ptr;
+  char *end = index(p, '\n');
+  *end = '\0';
+  ptr = end + 1;
+  return p;
+}
+
 void Campaign::read_from_stdin()
 {
-  const int bufsize = 256;
-  vector<char> buf_container(bufsize);
-  char *buf = buf_container.data();
-  int i, value;
-
-  /// read N, D and resize vectors accordingly.
-  fgets(buf, bufsize, stdin);
-  char *space = index(buf, ' ');
-  N = strtol(buf, NULL, 10);
+  int n, i, value;
+  char *line;
+  int pos = 0;
+  while((n = read(0, buf + pos, bufsize - pos)) > 0){
+    pos += n;
+  }
+  buf[pos] = '\n';
+  buf[pos + 1] = '\0';
+  line = get_line();
+  char *space = index(line, ' ');
+  N = strtol(line, NULL, 10);
   D = strtol(space, NULL, 10);
-
   price_list.resize(N + 1); /// add 0 as the first element.
   cprices.resize(D);
   cp_sorted.resize(D);
@@ -78,30 +96,30 @@ void Campaign::read_from_stdin()
 
   /// read item prices.
   for(i = 0; i < N; i++){
-    fgets(buf, bufsize, stdin);
-    value = strtol(buf, NULL, 10);
-    if(likely(!multiplicity[value])){
-      multiplicity[value] = 1;
+    line = get_line();
+    value = strtol(line, NULL, 10);
+    if(likely(!count_and_offset[value])){
+      count_and_offset[value] = 1;
       price_list[num_unique] = value;
       num_unique++;
     }else{
-      multiplicity[value]++;
+      count_and_offset[value]++;
     }
   }
 
   /// read campaign prices.
   for(i = 0; i < D; i++){
-    fgets(buf, bufsize, stdin);
-    value = strtol(buf, NULL, 10);
+    line = get_line();
+    value = strtol(line, NULL, 10);
     cp_sorted[i] = value;
     cprices[i] = value;
   }
 
   /// sort price_list and cp_sorted
-  sort_data();
+  precompute();
 }
 
-void Campaign::sort_data()
+void Campaign::precompute()
 {
   qsort(cp_sorted.data(), D, sizeof(int), compare);
   qsort(price_list.data(), num_unique, sizeof(int), compare);
@@ -122,7 +140,7 @@ int Campaign::find_best_price(int cp)
   /// possible location for larger
   vector<int>::iterator i = lower_bound(i1, i2, larger);
   /// buf if it is not in price_list, use the next lower value.
-  if(!multiplicity[larger]){
+  if(!count_and_offset[larger]){
     --i;
   }
   /// looping over larger.
@@ -136,11 +154,11 @@ int Campaign::find_best_price(int cp)
     /// trial value for smaller price.
     int smaller = cp - larger;
     /// if smaller is not on the price_list, or, it is on the list but
-    /// smaller happens to be same with larger and multiplicity is 1
+    /// smaller happens to be same with larger and count_and_offset is 1
     /// (means smaller and larger are same item), we need to look for the
     /// next lower value for smaller.
-    if(likely(!multiplicity[smaller]) || 
-       (multiplicity[smaller] == 1 && cp == 2 * larger)){
+    if(likely(!count_and_offset[smaller]) || 
+       (count_and_offset[smaller] == 1 && cp == 2 * larger)){
       smaller = *(lower_bound(i1, i, smaller) - 1);
     }
     /// if smaller ends up in being unacceptably small, that means

@@ -2,8 +2,8 @@ import copy
 import random
 import subprocess
 
-scripts = (('./challenge3-cpp'),
-           ('python', 'challenge8.py'))
+scripts = (['./challenge4-cpp'],
+           ['python', 'challenge8.py'])
 
 def gen_data(N, D):
     data = "%d %d\n" % (N, D)
@@ -30,6 +30,18 @@ def compare_outputs(output):
 
 #countmax = 1
 countmax = 10
+
+def get_name(cmd):
+    if cmd[0] in ('python', 'sh', 'bash') and len(cmd) >= 2:
+        return cmd[1]
+    else:
+        if cmd[0].startswith('./'):
+            return cmd[0][2:]
+        else:
+            return cmd[0]
+
+print "comparing %s and %s" % (get_name(scripts[0]), get_name(scripts[1]))
+
 for count in xrange(countmax):
     print "test run %d of %d" % (count + 1, countmax)
     output = []
@@ -38,16 +50,21 @@ for count in xrange(countmax):
         D = random.randrange(1, 76)
         print "N, D = %d, %d" % (N, D)
         data = gen_data(N, D)
-        # f = open("data_check.txt", "wt")
-        # f.write(data)
-        # f.close()
+        f = open("data_check.txt", "wt")
+        f.write(data)
+        f.close()
         for i in xrange(2):
             p = subprocess.Popen(scripts[i],
                                  stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE)
-            child_output = p.communicate(data)[0]
-            if p.poll() != 0:
-                print str(scripts[i]) + "didn't end correctly."
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
+            child_output, child_err = p.communicate(data)
+            r = p.poll()
+            if r != 0:
+                print "poll status: " + repr(r)
+                print str(scripts[i]) + " didn't end correctly."
+                print "Child process error message:" + str(child_err)
+                print "Child process output:" + str(child_output)
                 p.terminate()
             output.append(copy.deepcopy(child_output))
         compare_outputs(output)

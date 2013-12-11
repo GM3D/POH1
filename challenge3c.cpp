@@ -1,20 +1,22 @@
 #include <iostream>
-#include <sstream>
+#include <cstdlib>
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <cstdlib>
+#include <stdexcept>
 #include <cstdio>
 #include <cstring>
-#include <stdexcept>
+#include <sys/time.h>
+
+const int num_marks = 10;
+timeval t[num_marks];
+
+using namespace std;
 
 #define likely(x)       __builtin_expect((x),1)
 #define unlikely(x)     __builtin_expect((x),0)
 
-using namespace std;
-
-/// used for sorting.
-int compare(const void *a, const void *b)
+inline int compare(const void *a, const void *b)
 {
   return (*(int *)a - *(int *)b);
 }
@@ -25,22 +27,23 @@ private:
   const int million;
   int N, D;
   int num_unique;
-  vector<int> price_list; /// list of item prices
-  vector<int> multiplicity; /// how many items for a given count
+  vector<int> price_list;
+  vector<int> multiplicity;
+  //  map<int, int> multiplicity;
   vector<int> cprices; /// campaign prices list.
-  vector<int> cp_sorted; /// same list as cprices, but sorted.
-  map<int, int> best_price; /// record best solution for each campaign price.
-  inline  int find_best_price(int cp); /// main algorithm
-  void sort_data();
+  vector<int> cp_sorted; /// same list, but sored.
+  map<int, int> best_price;
+  inline int find_best_price(int cp);
+  long counter[10];
+  long counter1[10];
 public:
   Campaign();
   ~Campaign();
-  /// read data from stdin and prepare internal structures.
   void read_from_stdin();
-  /// loops over all campaign prices calling find_best_price(cp)
   void find_best_prices();
-  /// dispays result.
   void print_best_prices();
+  void report_branch();
+  void sort_data();
 };
 
 Campaign::Campaign()
@@ -48,10 +51,14 @@ Campaign::Campaign()
     N(0), D(0), num_unique(1),
     price_list(vector<int>()),
     multiplicity(vector<int>(million + 1, 0)),
+    // multiplicity(map<int, int>()),
     cprices(vector<int>()),
     cp_sorted(vector<int>()),
     best_price(map<int, int>())
 {
+  for(int i = 0; i < 10; i++){
+    counter[i] = counter1[i] = 0;
+  }
 }
 
 Campaign::~Campaign()
@@ -60,22 +67,20 @@ Campaign::~Campaign()
 
 void Campaign::read_from_stdin()
 {
-  const int bufsize = 256;
-  vector<char> buf_container(bufsize);
-  char *buf = buf_container.data();
   int i, value;
-
+  const int bufsize = 256;
+  char *buf = new char[bufsize];
   /// read N, D and resize vectors accordingly.
   fgets(buf, bufsize, stdin);
   char *space = index(buf, ' ');
   N = strtol(buf, NULL, 10);
   D = strtol(space, NULL, 10);
-
+  gettimeofday(&t[2], NULL);
   price_list.resize(N + 1); /// add 0 as the first element.
   cprices.resize(D);
   cp_sorted.resize(D);
   price_list[0] = 0;
-
+  gettimeofday(&t[3], NULL);
   /// read item prices.
   for(i = 0; i < N; i++){
     fgets(buf, bufsize, stdin);
@@ -84,11 +89,14 @@ void Campaign::read_from_stdin()
       multiplicity[value] = 1;
       price_list[num_unique] = value;
       num_unique++;
+      // counter[0]++;
+      // counter1[0]++;
     }else{
       multiplicity[value]++;
+      // counter[0]++;
     }
   }
-
+  gettimeofday(&t[4], NULL);
   /// read campaign prices.
   for(i = 0; i < D; i++){
     fgets(buf, bufsize, stdin);
@@ -96,13 +104,12 @@ void Campaign::read_from_stdin()
     cp_sorted[i] = value;
     cprices[i] = value;
   }
-
-  /// sort price_list and cp_sorted
-  sort_data();
+  delete[] buf;
 }
 
 void Campaign::sort_data()
 {
+  /// sort price_list and cp_sorted
   qsort(cp_sorted.data(), D, sizeof(int), compare);
   qsort(price_list.data(), num_unique, sizeof(int), compare);
 }
@@ -113,49 +120,35 @@ int Campaign::find_best_price(int cp)
 {
   int candidate = 0;
   int lowlimit = max(cp / 2, (int)lowest_price);
-  /// possible largest value for the larger price.
   int larger = cp - lowest_price;
-  /// price_list[1] ... price_list[num_unique - 1] are valid prices.
   const vector<int>::iterator i1 = price_list.begin() + 1;
   const vector<int>::iterator i2 = price_list.begin() + num_unique;
-  
-  /// possible location for larger
   vector<int>::iterator i = lower_bound(i1, i2, larger);
-  /// buf if it is not in price_list, use the next lower value.
   if(!multiplicity[larger]){
     --i;
+    // counter1[1]++;
   }
-  /// looping over larger.
-  /// larger must be less than equal lowlimit(=10),
-  /// must be in the price_list range,
-  /// and once we find the best candidate solution which is equal to cp,
-  /// we don't have to calculate further.
+  // counter[1]++;
   while(larger >= lowlimit && candidate != cp && i != price_list.begin()){
-    /// larger price.
     larger = *i;
-    /// trial value for smaller price.
     int smaller = cp - larger;
-    /// if smaller is not on the price_list, or, it is on the list but
-    /// smaller happens to be same with larger and multiplicity is 1
-    /// (means smaller and larger are same item), we need to look for the
-    /// next lower value for smaller.
-    if(likely(!multiplicity[smaller]) || 
+    // counter[2]++;
+    if(unlikely(!multiplicity[smaller]) || 
        (multiplicity[smaller] == 1 && cp == 2 * larger)){
-      smaller = *(lower_bound(i1, i, smaller) - 1);
+      // counter1[2]++;
+      smaller = *(lower_bound(price_list.begin() + 1, i, smaller) - 1);
     }
-    /// if smaller ends up in being unacceptably small, that means
-    /// there is no possible pair for this (larger, small) pair.
-    /// so we check next larger.
     if(unlikely(smaller < lowest_price)){
       --i;
+      // counter[3]++;
+      // counter1[3]++;
       continue;
+    }else{
+      // counter[3]++;
     }
-    /// valid (larger, smaller) pair found. compare with the maximum so far.
     candidate = max(smaller + larger, candidate);
-    /// and check for next larger.
     --i;
   }
-  /// all possible larger value checked. return what we've got.
   return candidate;
 }
 
@@ -165,7 +158,9 @@ void Campaign::find_best_prices()
   int c;
   for(int i = D - 1; i >= 0; i--){
     c = cp_sorted[i];
+    // counter[4]++;
     if(unlikely(last_best == 0)){
+      // counter1[4]++;
       best_price[c] = 0;
     }else{
       best_price[c] = last_best = find_best_price(c);
@@ -175,18 +170,48 @@ void Campaign::find_best_prices()
 
 void Campaign::print_best_prices()
 {
-  stringstream output;
   for(int day = 0; day < D; day++){
-    output << best_price[cprices[day]] << "\n";
+    cout << best_price[cprices[day]] << "\n";
   }
-  cout << output.str();
 }
+
+void Campaign::report_branch()
+{  
+  for(int i = 0; i < 10; i++){
+    if(counter[i] > 0){
+      float ratio = 100.0 * ((float)(counter1[i])) / counter[i];
+      cout << "counter[" << i << "] true ratio = " << ratio << "% \n";
+    }
+  }
+}
+
+void report_time()
+{
+  for(int i = 0; i < num_marks - 1; i++){
+    long elapsed 
+      = (t[i+1].tv_sec - t[i].tv_sec) * 1000000
+      + t[i+1].tv_usec - t[i].tv_usec;
+    if(elapsed > 0){
+      fprintf(stderr, "t[%d] - t[%d] = %ld usec.\n", i+1, i, elapsed);
+    }
+  }
+}
+
 
 int main(int argc, char **argv)
 {
+  gettimeofday(&t[0], NULL);
   Campaign c1;
+  gettimeofday(&t[1], NULL);
   c1.read_from_stdin();
+  gettimeofday(&t[5], NULL);
+  c1.sort_data();
+  gettimeofday(&t[6], NULL);
   c1.find_best_prices();
+  gettimeofday(&t[7], NULL);
   c1.print_best_prices();
+  gettimeofday(&t[8], NULL);
+  //  c1.report_branch();
+  report_time();
   return 0;
 }
