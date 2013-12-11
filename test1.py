@@ -3,7 +3,7 @@ import random
 import subprocess
 
 scripts = (['./challenge4-cpp'],
-           ['python', 'challenge8.py'])
+           ['./challenge6b-c'])
 
 def gen_data(N, D):
     data = "%d %d\n" % (N, D)
