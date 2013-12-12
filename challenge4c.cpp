@@ -1,22 +1,19 @@
-// challenge6b.c by GM3D
+// challenge4c.cpp by GM3D ver 0.6
+// for checking consistency with challenge6.c.
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <unistd.h>
-#include <sys/time.h>
-
-#define NUM_MARKS 100
-struct timeval t[NUM_MARKS];
-long counter[10];
-long counter1[10];
 
 #define likely(x)       __builtin_expect((x),1)
 #define unlikely(x)     __builtin_expect((x),0)
 
-#define MILLION  1000*1000
-#define BUFSIZE 8192 * 2000
-#define MAX_DAYS 75
+inline int max(int a, int b){return a >= b? a: b;}
+
+#define MILLION  (1000*1000)
+#define BUFSIZE (8192 * 1000)
+#define MAX_DAYS 300
 
 const int lowest_price = 10;
 
@@ -34,7 +31,12 @@ int digit[64] = {
 
 int N, D;
 
-inline int max(int a, int b){return a >= b? a: b;}
+inline int get_next_valid_lower(int x);
+int find_best_price(int cp);
+void pre_compute();
+void read_from_stdin();
+void find_best_prices();
+void print_best_prices();
 
 inline int get_next_valid_lower(int x)
 {
@@ -64,13 +66,11 @@ void read_from_stdin()
   while((n = read(0, buf + pos, BUFSIZE - pos)) > 0){
     pos += n;
   }
-  gettimeofday(&t[1], NULL);
   buf[pos] = '\n';
   buf[pos + 1] = '\0';
   char *space = index(buf, ' ');
   N = atoi(buf);
   D = atoi(space + 1);
-  gettimeofday(&t[2], NULL);
   /// read item prices.
   char *src = index(space + 1, '\n') + 1;
   value = 0;
@@ -85,7 +85,6 @@ void read_from_stdin()
     }
     src ++;
   }
-  gettimeofday(&t[3], NULL);
   /// read campaign prices.
   int *dst = cprices;
   i = 0;
@@ -100,7 +99,6 @@ void read_from_stdin()
     }
     src ++;
   }
-  gettimeofday(&t[4], NULL);
   pre_compute();
 }
 
@@ -114,9 +112,7 @@ int find_best_price(int cp)
     int smaller = cp - larger;
     if(unlikely(smaller == larger && count_and_offset[smaller] == 1)) smaller--;
     smaller = get_next_valid_lower(smaller);
-    counter[3]++;
     if(unlikely(smaller < lowest_price)){
-      counter1[3]++;
       larger = get_next_valid_lower(--larger);
       continue;
     }
@@ -143,40 +139,10 @@ void print_best_prices()
   }
 }
 
-void report_branch()
-{ 
-  int i;
-  for(i = 0; i < 10; i++){
-    if(counter[i] > 0){
-      float ratio = 100.0 * ((float)(counter1[i])) / counter[i];
-      fprintf(stderr, "counter[%d] true ratio = %f%%\n", i, ratio);
-    }
-  }
-}
-
-void report_time()
-{
-  int i;
-  for(i = 0; i < NUM_MARKS - 1; i++){
-    long elapsed 
-      = (t[i+1].tv_sec - t[i].tv_sec) * 1000000
-      + t[i+1].tv_usec - t[i].tv_usec;
-    if(elapsed > 0){
-      fprintf(stderr, "t[%d] - t[%d] = %ld usec.\n", i+1, i, elapsed);
-    }
-  }
-}
-
 int main(int argc, char **argv)
 {
-  gettimeofday(&t[0], NULL);
   read_from_stdin();
-  gettimeofday(&t[5], NULL);
   find_best_prices();
-  gettimeofday(&t[6], NULL);
   print_best_prices();
-  gettimeofday(&t[7], NULL);
-  report_branch();
-  report_time();
   return 0;
 }

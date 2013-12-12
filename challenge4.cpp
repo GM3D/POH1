@@ -2,9 +2,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <vector>
-#include <map>
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <unistd.h>
@@ -24,13 +21,11 @@ int count_and_offset[million + 1];
 int cprices[max_days];
 int best_prices[max_days];
 
-int digit[96] = {
+int digit[64] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 class Campaign {
@@ -52,6 +47,18 @@ inline int Campaign::get_next_valid_lower(int x)
   return x;
 }
 
+void Campaign::pre_compute()
+{
+  int offset = 0;
+  for(int i = 0; i <= million; i++){
+    if(count_and_offset[i] > 0){
+      offset = 0;
+    }else{
+      count_and_offset[i] = offset;
+    }
+    offset--;
+  }
+}
 
 void Campaign::read_from_stdin()
 {
@@ -71,7 +78,7 @@ void Campaign::read_from_stdin()
   i = 0;
   while(i < N){
     if(*src != '\n'){
-      value = 10 * value + digit[*src];
+      value = 10 * value + digit[(int)*src];
     }else{
       count_and_offset[value]++;
       value = 0;
@@ -85,7 +92,7 @@ void Campaign::read_from_stdin()
   value = 0;
   while(i < D){
     if(*src != '\n'){
-      value = 10 * value + digit[*src];
+      value = 10 * value + digit[(int)*src];
     }else{
       *(dst++) = value;
       value = 0;
@@ -94,19 +101,6 @@ void Campaign::read_from_stdin()
     src ++;
   }
   pre_compute();
-}
-
-void Campaign::pre_compute()
-{
-  int offset = 0;
-  for(int i = 0; i <= million; i++){
-    if(count_and_offset[i] > 0){
-      offset = 0;
-    }else{
-      count_and_offset[i] = offset;
-    }
-    offset--;
-  }
 }
 
 int Campaign::find_best_price(int cp)
@@ -132,9 +126,9 @@ int Campaign::find_best_price(int cp)
 void Campaign::find_best_prices()
 {
   int c;
-  for(int i = 0; i < D; i++){
-    c = cprices[i];
-    best_prices[i] = find_best_price(c);
+  for(int day = 0; day < D; day++){
+    c = cprices[day];
+    best_prices[day] = find_best_price(c);
   }
 }
 

@@ -8,11 +8,11 @@
 #define likely(x)       __builtin_expect((x),1)
 #define unlikely(x)     __builtin_expect((x),0)
 
-#define max(a, b) (((a)>(b))?(a):(b))
+inline int max(int a, int b){return a >= b? a: b;}
 
-#define MILLION  1000*1000
-#define BUFSIZE 8192 * 1000
-#define MAX_DAYS 75
+#define MILLION  (1000*1000)
+#define BUFSIZE (8192 * 1000)
+#define MAX_DAYS 300
 
 const int lowest_price = 10;
 
@@ -21,16 +21,21 @@ int count_and_offset[MILLION + 1];
 int cprices[MAX_DAYS];
 int best_prices[MAX_DAYS];
 
-int digit[96] = {
+int digit[64] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 int N, D;
+
+inline int get_next_valid_lower(int x);
+int find_best_price(int cp);
+void pre_compute();
+void read_from_stdin();
+void find_best_prices();
+void print_best_prices();
 
 inline int get_next_valid_lower(int x)
 {
@@ -71,7 +76,7 @@ void read_from_stdin()
   i = 0;
   while(i < N){
     if(*src != '\n'){
-      value = 10 * value + digit[(int)(*src)];
+      value = 10 * value + digit[(int)*src];
     }else{
       count_and_offset[value]++;
       value = 0;
@@ -85,7 +90,7 @@ void read_from_stdin()
   value = 0;
   while(i < D){
     if(*src != '\n'){
-      value = 10 * value + digit[(int)(*src)];
+      value = 10 * value + digit[(int)*src];
     }else{
       *(dst++) = value;
       value = 0;

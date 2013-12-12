@@ -2,8 +2,8 @@ import copy
 import random
 import subprocess
 
-scripts = (['./challenge4-cpp'],
-           ['./challenge6b-c'])
+scripts = (['./challenge6-c'],
+           ['./challenge4c-cpp'])
 
 def gen_data(N, D):
     data = "%d %d\n" % (N, D)
