@@ -73,7 +73,7 @@ p_list.sort()
 #cp_sorted = sorted(cprices)
 
 t[3] = datetime.now()
-best_price = {}
+
 for c in cprices:
     print find_best_price(c)
 

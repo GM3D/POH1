@@ -12,4 +12,4 @@ def gen_data(N, D):
         data += "%d\n" % cprice
     return data
 
-print gen_data(500000, 75)
+print gen_data(200, 10)
