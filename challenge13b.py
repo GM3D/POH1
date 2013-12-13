@@ -54,7 +54,7 @@ def find_best_price(cp):
     return candidate
 
 t[2] = datetime.now()
-lines = stdin.readlines()
+lines = stdin.read().splitlines()
 N, D = map(int, lines[0].split())
 p_list = [0]
 multiplicity = {0:1}
@@ -75,7 +75,6 @@ p_list.sort()
 #cp_sorted = sorted(cprices)
 
 t[3] = datetime.now()
-best_price = {}
 for c in cprices:
     print find_best_price(c)
 

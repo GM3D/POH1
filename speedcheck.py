@@ -12,15 +12,18 @@ def report_time():
 
 t = [datetime.now() for i in range(num_marks)]
 
+def stdin_readlines():
+    lines=sys.stdin.readlines()
 
 def regular_read():
     return  sys.stdin.read()
 
 def read_and_parse():
     t[0] = datetime.now()
-    content = regular_read()
+#    content = regular_read()
     t[1] = datetime.now()
-    lines = content.split('\n')
+#    lines = content.splitlines()
+    lines=sys.stdin.readlines()
     print "%d lines." % len(lines)
     t[2] = datetime.now()
 
