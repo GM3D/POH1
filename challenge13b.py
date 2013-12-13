@@ -8,6 +8,7 @@ import cProfile
 
 t[0] = datetime.now()
 
+from sys import stdin
 lowest_price = 10
 
 def bisect_left(array, value):
@@ -53,11 +54,12 @@ def find_best_price(cp):
     return candidate
 
 t[2] = datetime.now()
-N, D = map(int, raw_input().rstrip().split())
+lines = stdin.read().splitlines()
+N, D = map(int, lines[0].split())
 p_list = [0]
 multiplicity = {0:1}
 for i in xrange(N):
-    price = int(input())
+    price = int(lines[1 + i])
     if price in multiplicity:
         multiplicity[price] += 1
     else:
@@ -67,13 +69,12 @@ for i in xrange(N):
 #cp_sorted = []
 # for i in xrange(D):
 #    cprices.append(int(input()))
-cprices = (int(input()) for day in xrange(D))
+cprices = map(int, lines[1 + N:])
 
 p_list.sort()
 #cp_sorted = sorted(cprices)
 
 t[3] = datetime.now()
-
 for c in cprices:
     print find_best_price(c)
 
