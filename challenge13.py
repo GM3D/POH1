@@ -1,12 +1,6 @@
-#challenge9b.py
+#challenge13.py
 # using multiplicity and sorted price list.
-
-from datetime import datetime, timedelta
-t = [datetime.now() for i in range(10)]
-from sys import stderr
-import cProfile
-
-t[0] = datetime.now()
+# with self-made bisect.
 
 lowest_price = 10
 
@@ -25,7 +19,6 @@ def bisect_left(array, value):
             step = 1
     return i
 
-t[1] = datetime.now()
 def find_best_price(cp):
     candidate = 0
     if cp > 2 * lowest_price:
@@ -52,7 +45,6 @@ def find_best_price(cp):
         larger = p_list[i]
     return candidate
 
-t[2] = datetime.now()
 N, D = map(int, raw_input().rstrip().split())
 p_list = [0]
 multiplicity = {0:1}
@@ -63,16 +55,14 @@ for i in xrange(N):
     else:
         multiplicity[price] = 1
         p_list.append(price)
+
 cprices = []
-cp_sorted = []
 for i in xrange(D):
     cprices.append(int(input()))
-
 
 p_list.sort()
 cp_sorted = sorted(cprices)
 
-t[3] = datetime.now()
 best_price = {}
 last_best = 1
 for c in reversed(cp_sorted):
@@ -81,11 +71,5 @@ for c in reversed(cp_sorted):
     else:
         best_price[c] = last_best = find_best_price(c)
 
-t[4] = datetime.now()
 for day in xrange(D):
     print best_price[cprices[day]]
-
-t[5] = datetime.now()
-for i in xrange(4):
-    stderr.write("t[%d] - t[%d] = %d us.\n" % 
-                     (i + 1, i, (t[i + 1] - t[i]).microseconds))
