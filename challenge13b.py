@@ -63,29 +63,25 @@ for i in xrange(N):
     else:
         multiplicity[price] = 1
         p_list.append(price)
-cprices = []
-cp_sorted = []
-for i in xrange(D):
-    cprices.append(int(input()))
-
+#cprices = []
+#cp_sorted = []
+# for i in xrange(D):
+#    cprices.append(int(input()))
+cprices = (int(input()) for day in xrange(D))
 
 p_list.sort()
-cp_sorted = sorted(cprices)
+#cp_sorted = sorted(cprices)
 
 t[3] = datetime.now()
 best_price = {}
-last_best = 1
-for c in reversed(cp_sorted):
-    if last_best == 0:
-        best_price[c] = 0
-    else:
-        best_price[c] = last_best = find_best_price(c)
+for c in cprices:
+    print find_best_price(c)
+
+# t[4] = datetime.now()
+# for day in xrange(D):
+#     print best_price[cprices[day]]
 
 t[4] = datetime.now()
-for day in xrange(D):
-    print best_price[cprices[day]]
-
-t[5] = datetime.now()
 for i in xrange(4):
     stderr.write("t[%d] - t[%d] = %d us.\n" % 
                      (i + 1, i, (t[i + 1] - t[i]).microseconds))

@@ -1,6 +1,6 @@
 #challenge13.py
 # using multiplicity and sorted price list.
-# with self-made bisect.
+# with self-made bisect and raw input.
 
 lowest_price = 10
 
