@@ -7,10 +7,24 @@ from sys import stderr
 import cProfile
 
 t[0] = datetime.now()
-from bisect import bisect_left, insort
 from sys import stdin
 
 lowest_price = 10
+
+def bisect_left(array, value):
+    l = len(array)
+    i = step = l / 2
+    while True:
+        if i  < l and array[i] < value:
+            i += step
+        elif i >= 1 and value <= array[i - 1]:
+            i -= step
+        else:
+            break
+        step /= 2
+        if step == 0:
+            step = 1
+    return i
 
 t[1] = datetime.now()
 def find_best_price(cp):
@@ -51,13 +65,15 @@ for i in xrange(N):
         multiplicity[price] += 1
     else:
         multiplicity[price] = 1
-        insort(p_list, price)
+        p_list.append(price)
 cprices = []
 cp_sorted = []
 for i in xrange(D):
     price = int(lines[1 + N + i])
-    insort(cp_sorted, price)
     cprices.append(price)
+
+p_list.sort()
+cp_sorted = sorted(cprices)
 
 t[3] = datetime.now()
 best_price = {}
