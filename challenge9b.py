@@ -1,3 +1,6 @@
+#challenge9b.py
+# using multiplicity and sorted price list.
+
 from datetime import datetime, timedelta
 t = [datetime.now() for i in range(5)]
 from sys import stderr
@@ -9,6 +12,7 @@ from sys import stdin
 
 lowest_price = 10
 
+t[1] = datetime.now()
 def find_best_price(cp):
     candidate = 0
     if cp > 2 * lowest_price:
@@ -35,7 +39,7 @@ def find_best_price(cp):
         larger = p_list[i]
     return candidate
 
-t[1] = datetime.now()
+t[2] = datetime.now()
 lines=stdin.readlines()
 header = lines[0].rstrip().split(' ')
 N, D = map(int, lines[0].split())
@@ -55,7 +59,7 @@ for i in xrange(D):
     insort(cp_sorted, price)
     cprices.append(price)
 
-t[2] = datetime.now()
+t[3] = datetime.now()
 best_price = {}
 last_best = 1
 for c in reversed(cp_sorted):
@@ -64,11 +68,11 @@ for c in reversed(cp_sorted):
     else:
         best_price[c] = last_best = find_best_price(c)
 
-t[3] = datetime.now()
+t[4] = datetime.now()
 for day in xrange(D):
     print best_price[cprices[day]]
 
-t[4] = datetime.now()
+t[5] = datetime.now()
 for i in xrange(4):
     stderr.write("t[%d] - t[%d] = %d us.\n" % 
                      (i + 1, i, (t[i + 1] - t[i]).microseconds))
