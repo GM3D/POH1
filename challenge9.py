@@ -1,3 +1,6 @@
+# challenge 9.py by GM3D ver 0.2
+# data: sorted list + dict, lookup: count and bisect
+from sys import stdin
 from bisect import bisect_left, insort
 
 lowest_price = 10
@@ -28,12 +31,12 @@ def find_best_price(cp):
         larger = p_list[i]
     return candidate
 
-header = raw_input().rstrip().split(' ')
-N, D = int(header[0]), int(header[1])
+lines=stdin.readlines()
+N, D = map(int, lines[0].split())
 p_list = [0]
 multiplicity = {0:1}
 for i in xrange(N):
-    price = int(raw_input().rstrip())
+    price = int(lines[1 + i])
     if price in multiplicity:
         multiplicity[price] += 1
     else:
@@ -42,7 +45,7 @@ for i in xrange(N):
 cprices = []
 cp_sorted = []
 for i in xrange(D):
-    price = int(raw_input().rstrip())
+    price = int(lines[1 + N + i])
     insort(cp_sorted, price)
     cprices.append(price)
 

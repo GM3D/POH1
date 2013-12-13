@@ -1,20 +1,5 @@
-#challenge10b.py
-# count_and_offset is dict
-# with prescan.
+# challenge10.py by GM3D ver 0.1
 
-from datetime import datetime, timedelta
-from sys import stderr
-
-num_marks = 10
-def report_time():
-    for i in xrange(num_marks - 1):
-        if t[i+1] > t[i]:
-            stderr.write("t[%d] - t[%d] = %d us.\n" % 
-                             (i + 1, i, (t[i + 1] - t[i]).microseconds))
-
-t = [datetime.now() for i in range(num_marks)]
-
-t[0] = datetime.now()
 from sys import stdin
 
 def get_next_valid_lower(x):
@@ -27,13 +12,11 @@ million = 1000 * 1000
 max_days = 75
 lowest_price = 10
 
-t[1] = datetime.now()
 content = stdin.read()
 lines=content.splitlines()
 
 N, D = map(int, lines[0].split())
 
-t[2] = datetime.now()
 count_and_offset = {}
 for i in xrange(N):
     value = int(lines[i + 1])
@@ -41,9 +24,9 @@ for i in xrange(N):
         count_and_offset[value] += 1
     except KeyError:
         count_and_offset[value] = 1
+        
 cprices = map(int, lines[N + 1:])
 
-t[3] = datetime.now()
 offset = 0;
 for i in xrange(million + 1):
     if i in count_and_offset:
@@ -52,7 +35,6 @@ for i in xrange(million + 1):
         count_and_offset[i] = offset
     offset -= 1
 
-t[4] = datetime.now()
 best_price = []
 for day in xrange(D):
     candidate = 0
@@ -76,10 +58,5 @@ for day in xrange(D):
         larger = get_next_valid_lower(larger - 1)
     best_price.append(candidate)
 
-t[5] = datetime.now()
 for day in xrange(D):
     print best_price[day]
-    
-t[6] = datetime.now()
-
-report_time()

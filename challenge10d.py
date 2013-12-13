@@ -1,5 +1,5 @@
-#challenge10b.py
-# count_and_offset is dict
+#challenge10c.py
+# count_and_offset is list
 # with prescan.
 
 from datetime import datetime, timedelta
@@ -16,6 +16,7 @@ t = [datetime.now() for i in range(num_marks)]
 
 t[0] = datetime.now()
 from sys import stdin
+from collections import Counter
 
 def get_next_valid_lower(x):
     l = count_and_offset[x]
@@ -34,19 +35,18 @@ lines=content.splitlines()
 N, D = map(int, lines[0].split())
 
 t[2] = datetime.now()
-count_and_offset = {}
+count_and_offset = Counter()
+count_and_offset[0] = 0
 for i in xrange(N):
     value = int(lines[i + 1])
-    try:
-        count_and_offset[value] += 1
-    except KeyError:
-        count_and_offset[value] = 1
+    count_and_offset[value] += 1
+
 cprices = map(int, lines[N + 1:])
 
 t[3] = datetime.now()
 offset = 0;
 for i in xrange(million + 1):
-    if i in count_and_offset:
+    if count_and_offset[i] > 0:
             offset = 0;
     else:
         count_and_offset[i] = offset
