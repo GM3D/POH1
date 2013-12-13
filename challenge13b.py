@@ -1,5 +1,6 @@
-#challenge9b.py
+#challenge13b.py
 # using multiplicity and sorted price list.
+# using stdin.read().splitlines() for input.
 
 from datetime import datetime, timedelta
 t = [datetime.now() for i in range(10)]
@@ -65,22 +66,14 @@ for i in xrange(N):
     else:
         multiplicity[price] = 1
         p_list.append(price)
-#cprices = []
-#cp_sorted = []
-# for i in xrange(D):
-#    cprices.append(int(input()))
+
 cprices = map(int, lines[1 + N:])
 
 p_list.sort()
-#cp_sorted = sorted(cprices)
 
 t[3] = datetime.now()
 for c in cprices:
     print find_best_price(c)
-
-# t[4] = datetime.now()
-# for day in xrange(D):
-#     print best_price[cprices[day]]
 
 t[4] = datetime.now()
 for i in xrange(4):
