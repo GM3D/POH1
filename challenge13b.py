@@ -55,7 +55,6 @@ def find_best_price(cp):
 
 t[2] = datetime.now()
 lines=stdin.readlines()
-header = lines[0].rstrip().split(' ')
 N, D = map(int, lines[0].split())
 p_list = [0]
 multiplicity = {0:1}
@@ -68,9 +67,7 @@ for i in xrange(N):
         p_list.append(price)
 cprices = []
 cp_sorted = []
-for i in xrange(D):
-    price = int(lines[1 + N + i])
-    cprices.append(price)
+cprices = map(int, lines[1 + N:])
 
 p_list.sort()
 cp_sorted = sorted(cprices)
