@@ -1,7 +1,4 @@
-#challenge13.py
-# using multiplicity and sorted price list.
-# with self-made bisect and raw input.
-
+from sys import stdin
 lowest_price = 10
 
 def bisect_left(array, value):
@@ -45,19 +42,21 @@ def find_best_price(cp):
         larger = p_list[i]
     return candidate
 
-N, D = map(int, raw_input().rstrip().split())
+lines = stdin.readlines()
+N, D = map(int, lines[0].split())
 p_list = [0]
 multiplicity = {0:1}
 for i in xrange(N):
-    price = int(input())
+    price = int(lines[1 + i])
     if price in multiplicity:
         multiplicity[price] += 1
     else:
         multiplicity[price] = 1
         p_list.append(price)
+cprices = map(int, lines[1 + N:])
 
-cprices = (int(input()) for day in xrange(D))
 p_list.sort()
 
+best_price = {}
 for c in cprices:
     print find_best_price(c)
