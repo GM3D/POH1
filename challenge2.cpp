@@ -7,7 +7,7 @@ int main(int argc, char **argv){
   string line;
   int linenum = 0;
   int N, D;
-  list<int> p_list;
+  list<int> prices;
   int *cprices;
   int value = 0;
   int i = 0;
@@ -16,11 +16,11 @@ int main(int argc, char **argv){
       int space = line.find(' ');
       N = strtol(line.c_str(), NULL, 10);
       D = strtol(line.c_str() + space, NULL, 10);
-      p_list = new int[1000001];
+      prices = new int[1000001];
       cprices = new int[D];
     }else if(linenum <= N){
       value = strtol(line.c_str(), NULL, 10);
-      p_list[value] += 1;
+      prices[value] += 1;
     }else if(linenum <= N + D + 1){
       value = strtol(line.c_str(), NULL, 10);
       cprices[i++] = value;
@@ -35,11 +35,11 @@ int main(int argc, char **argv){
     cp = cprices[day];
     larger = cp - 10;
     while(1){
-      larger = search_nonzero_downward(larger - 1, p_list);
+      larger = search_nonzero_downward(larger - 1, prices);
       if(larger < cp / 2 || larger < 10) break;
-      p_list[larger]--;
-      smaller = search_nonzero_downward(cp - larger, p_list);
-      p_list[larger]++;
+      prices[larger]--;
+      smaller = search_nonzero_downward(cp - larger, prices);
+      prices[larger]++;
       if(smaller < 10) continue;
       if(smaller + larger > candidate){
 	candidate = smaller + larger;
