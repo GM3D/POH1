@@ -10,6 +10,7 @@ import cProfile
 t[0] = datetime.now()
 
 from sys import stdin
+from collections import Counter
 lowest_price = 10
 
 def bisect_left(array, value):
@@ -35,41 +36,34 @@ def find_best_price(cp):
     else:
         lowlimit = lowest_price
     larger = cp - lowest_price
-    i = bisect_left(p_list, larger)
+    i = bisect_left(prices, larger)
     if not larger in multiplicity:
         i -= 1
-        larger = p_list[i]
+        larger = prices[i]
     while larger >= lowlimit and candidate != cp:
         smaller = cp - larger
         if (not smaller in multiplicity or \
                 (multiplicity[smaller] == 1 and cp == 2 * larger)):
-            smaller = p_list[bisect_left(p_list, smaller) - 1]
+            smaller = prices[bisect_left(prices, smaller) - 1]
         if smaller < lowest_price:
             i -= 1
-            larger = p_list[i]
+            larger = prices[i]
             continue
         if smaller + larger > candidate:
             candidate = smaller + larger
         i -= 1
-        larger = p_list[i]
+        larger = prices[i]
     return candidate
 
 t[2] = datetime.now()
 lines = stdin.read().splitlines()
 N, D = map(int, lines[0].split())
-p_list = [0]
-multiplicity = {0:1}
-for i in xrange(N):
-    price = int(lines[1 + i])
-    if price in multiplicity:
-        multiplicity[price] += 1
-    else:
-        multiplicity[price] = 1
-        p_list.append(price)
+
+prices = [0] + map(int, lines[1:1 + N])
+multiplicity = Counter(prices)
+prices.sort()
 
 cprices = map(int, lines[1 + N:])
-
-p_list.sort()
 
 t[3] = datetime.now()
 for c in cprices:

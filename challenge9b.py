@@ -1,5 +1,5 @@
 #challenge9b.py
-# using multiplicity and sorted price list.
+# using count_and_offset and sorted price list.
 
 from datetime import datetime, timedelta
 t = [datetime.now() for i in range(10)]
@@ -20,38 +20,38 @@ def find_best_price(cp):
     else:
         lowlimit = lowest_price
     larger = cp - lowest_price
-    i = bisect_left(p_list, larger)
-    if not larger in multiplicity:
+    i = bisect_left(prices, larger)
+    if not larger in count_and_offset:
         i -= 1
-        larger = p_list[i]
+        larger = prices[i]
     while larger >= lowlimit and candidate != cp:
         smaller = cp - larger
-        if (not smaller in multiplicity or \
-                (multiplicity[smaller] == 1 and cp == 2 * larger)):
-            smaller = p_list[bisect_left(p_list, smaller) - 1]
+        if (not smaller in count_and_offset or \
+                (count_and_offset[smaller] == 1 and cp == 2 * larger)):
+            smaller = prices[bisect_left(prices, smaller) - 1]
         if smaller < lowest_price:
             i -= 1
-            larger = p_list[i]
+            larger = prices[i]
             continue
         if smaller + larger > candidate:
             candidate = smaller + larger
         i -= 1
-        larger = p_list[i]
+        larger = prices[i]
     return candidate
 
 t[2] = datetime.now()
 lines=stdin.readlines()
 header = lines[0].rstrip().split(' ')
 N, D = map(int, lines[0].split())
-p_list = [0]
-multiplicity = {0:1}
+prices = [0]
+count_and_offset = {0:1}
 for i in xrange(N):
     price = int(lines[1 + i])
-    if price in multiplicity:
-        multiplicity[price] += 1
+    if price in count_and_offset:
+        count_and_offset[price] += 1
     else:
-        multiplicity[price] = 1
-        insort(p_list, price)
+        count_and_offset[price] = 1
+        insort(prices, price)
 cprices = []
 cp_sorted = []
 for i in xrange(D):
