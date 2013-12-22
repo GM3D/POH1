@@ -1,48 +1,66 @@
-#challenge10b.py
-# count_and_offset is dict
-# with prescan.
+#challenge10i.py
+# count_and_offset is Counter and linearly scanned on demand
+# caching search result.
+# data read and parse is unified.
 
 import myprofiler
 t = myprofiler.ProfileTimer()
 
 t.mark("start")
 from sys import stdin
+from collections import Counter
 
 def get_next_valid_lower(x):
-    l = count_and_offset[x]
-    if l < 0:
-        x += l
-    return x
+    if x in count_and_offset:
+        return x
+    else:
+        j = 0
+        while x + j not in count_and_offset and x + j > 0:
+            j -= 1
+        for k in xrange(-j):
+            count_and_offset[x + k] = -k
+        return x + j
+
+def read_and_parse(s):
+    p = 0
+    n = 0
+    l = len(s)
+    while p < s:
+        if s[p] != '\n' and s[p] != ' ':
+            n = 10 * n + int(s[p])
+        else:
+            yield n
+            n = 0
+        p += 1
+    yield n
 
 million = 1000 * 1000
 max_days = 75
 lowest_price = 10
 
-t.mark("stdin.read() + splitlines()")
+t.mark("stdin.read()")
 content = stdin.read()
-lines=content.splitlines()
+#lines=content.splitlines()
+data = read_and_parse(content)
 
-N, D = map(int, lines[0].split())
-
+N, D = data.next(), data.next()
 t.mark("storing N data w try/catch")
-count_and_offset = {}
+count_and_offset = Counter()
+count_and_offset[0] = 0
 t.mark("store N data with try/catch")
 for i in xrange(N):
-    value = int(lines[i + 1])
-    try:
-        count_and_offset[value] += 1
-    except KeyError:
-        count_and_offset[value] = 1
-cprices = map(int, lines[N + 1:])
+    count_and_offset[data.next()] += 1
+#cprices = map(int, lines[N + 1:])
+cprices = [data.next() for i in xrange(D)]
 
 t.mark("precsan (1000001 items)")
-offset = 0;
-for i in xrange(million + 1):
-    if i in count_and_offset:
-            offset = 0;
-    else:
-        count_and_offset[i] = offset
-    offset -= 1
+# offset = 0;
+# for i in xrange(million + 1):
+#     if i in count_and_offset:
+#             offset = 0;
+#     else:
+#         count_and_offset[i] = offset
+#     offset -= 1
 
 t.mark("search algorithm")
 best_price = []
