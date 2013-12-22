@@ -1,6 +1,7 @@
 #challenge10b.py
-# count_and_offset is dict
-# with prescan.
+# count_and_offset is dict and linearly scanned on demand
+# not caching result
+
 
 import myprofiler
 t = myprofiler.ProfileTimer()
@@ -9,10 +10,17 @@ t.mark("start")
 from sys import stdin
 
 def get_next_valid_lower(x):
-    l = count_and_offset[x]
-    if l < 0:
-        x += l
-    return x
+    if x in count_and_offset:
+        return x
+    else:
+        j = 0
+#        l1 = []
+        while x + j not in count_and_offset and x + j > 0:
+            j -= 1
+#            11.append(j)
+        # for k in xrange(j, 0):
+        #     count_and_offset[x + k] = k
+        return x + j
 
 million = 1000 * 1000
 max_days = 75
@@ -25,7 +33,7 @@ lines=content.splitlines()
 N, D = map(int, lines[0].split())
 
 t.mark("storing N data w try/catch")
-count_and_offset = {}
+count_and_offset = {0:0}
 t.mark("store N data with try/catch")
 for i in xrange(N):
     value = int(lines[i + 1])
@@ -36,13 +44,13 @@ for i in xrange(N):
 cprices = map(int, lines[N + 1:])
 
 t.mark("precsan (1000001 items)")
-offset = 0;
-for i in xrange(million + 1):
-    if i in count_and_offset:
-            offset = 0;
-    else:
-        count_and_offset[i] = offset
-    offset -= 1
+# offset = 0;
+# for i in xrange(million + 1):
+#     if i in count_and_offset:
+#             offset = 0;
+#     else:
+#         count_and_offset[i] = offset
+#     offset -= 1
 
 t.mark("search algorithm")
 best_price = []
@@ -57,8 +65,9 @@ for day in xrange(D):
     larger = get_next_valid_lower(larger)
     while larger >= lowlimit and candidate != cp:
         smaller = cp - larger
-        if (count_and_offset[smaller] == 1 and smaller == larger):
-            smaller -= 1
+        if smaller in count_and_offset:
+            if (count_and_offset[smaller] == 1 and smaller == larger):
+                smaller -= 1
         smaller = get_next_valid_lower(smaller)
         if smaller < lowest_price:
             larger = get_next_valid_lower(larger - 1)

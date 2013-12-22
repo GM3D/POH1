@@ -18,6 +18,32 @@ def stdin_readlines():
 def regular_read():
     return  sys.stdin.read()
 
+def parsegenerator(s, n)
+    while(count < 0):
+        if s(i) == '\n':
+            count += 1
+            yield value
+        else:
+            value = value * 10 + ord(s[i]) - ord('0')
+        i += 1
+
+parsegenerator.i = 0
+parsegenerator.count = 0
+parsegenerator.value = 0
+        
+def generator_and_counter():
+    content = regular_read()
+    i = find(content, ' ')
+    N = int(content[:i])
+    j = find(content, '\n')
+    D = int(content[i + 1:j])
+    src = parsegenerator(content[j+1:], N)
+    count = Counter((p for p in src))
+    cprices = [p for p in src
+                    
+                     
+    
+
 def read_and_parse():
     t[0] = datetime.now()
 #    content = regular_read()

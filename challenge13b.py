@@ -1,5 +1,6 @@
-#challenge9b.py
+#challenge13b.py
 # using multiplicity and sorted price list.
+# using stdin.read().splitlines() for input.
 
 from datetime import datetime, timedelta
 t = [datetime.now() for i in range(10)]
@@ -9,6 +10,7 @@ import cProfile
 t[0] = datetime.now()
 
 from sys import stdin
+from collections import Counter
 lowest_price = 10
 
 def bisect_left(array, value):
@@ -56,6 +58,7 @@ def find_best_price(cp):
 t[2] = datetime.now()
 lines = stdin.read().splitlines()
 N, D = map(int, lines[0].split())
+<<<<<<< HEAD
 prices = [0]
 multiplicity = {0:1}
 for i in xrange(N):
@@ -73,6 +76,14 @@ cprices = map(int, lines[1 + N:])
 
 prices.sort()
 #cp_sorted = sorted(cprices)
+=======
+
+prices = [0] + map(int, lines[1:1 + N])
+multiplicity = Counter(prices)
+prices.sort()
+
+cprices = map(int, lines[1 + N:])
+>>>>>>> kuro
 
 t[3] = datetime.now()
 for c in cprices:

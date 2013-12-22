@@ -1,5 +1,5 @@
 #challenge9b.py
-# using multiplicity and sorted price list.
+# using count_and_offset and sorted price list.
 
 from datetime import datetime, timedelta
 t = [datetime.now() for i in range(10)]
@@ -21,13 +21,22 @@ def find_best_price(cp):
         lowlimit = lowest_price
     larger = cp - lowest_price
     i = bisect_left(prices, larger)
+<<<<<<< HEAD
     if not larger in multiplicity:
+=======
+    if not larger in count_and_offset:
+>>>>>>> kuro
         i -= 1
         larger = prices[i]
     while larger >= lowlimit and candidate != cp:
         smaller = cp - larger
+<<<<<<< HEAD
         if (not smaller in multiplicity or \
                 (multiplicity[smaller] == 1 and cp == 2 * larger)):
+=======
+        if (not smaller in count_and_offset or \
+                (count_and_offset[smaller] == 1 and cp == 2 * larger)):
+>>>>>>> kuro
             smaller = prices[bisect_left(prices, smaller) - 1]
         if smaller < lowest_price:
             i -= 1
@@ -44,13 +53,21 @@ lines=stdin.readlines()
 header = lines[0].rstrip().split(' ')
 N, D = map(int, lines[0].split())
 prices = [0]
+<<<<<<< HEAD
 multiplicity = {0:1}
+=======
+count_and_offset = {0:1}
+>>>>>>> kuro
 for i in xrange(N):
     price = int(lines[1 + i])
-    if price in multiplicity:
-        multiplicity[price] += 1
+    if price in count_and_offset:
+        count_and_offset[price] += 1
     else:
+<<<<<<< HEAD
         multiplicity[price] = 1
+=======
+        count_and_offset[price] = 1
+>>>>>>> kuro
         insort(prices, price)
 cprices = []
 cp_sorted = []

@@ -1,6 +1,7 @@
-#challenge10b.py
-# count_and_offset is dict
-# with prescan.
+#challenge10h.py
+# count_and_offset is dict and linearly scanned on demand
+# caching search result.
+# data read and parse is unified.
 
 import myprofiler
 t = myprofiler.ProfileTimer()
@@ -9,10 +10,28 @@ t.mark("start")
 from sys import stdin
 
 def get_next_valid_lower(x):
-    l = count_and_offset[x]
-    if l < 0:
-        x += l
-    return x
+    if x in count_and_offset:
+        return x
+    else:
+        j = 0
+        while x + j not in count_and_offset and x + j > 0:
+            j -= 1
+        for k in xrange(-j):
+            count_and_offset[x + k] = -k
+        return x + j
+
+def read_and_parse(s):
+    p = 0
+    n = 0
+    l = len(s)
+    while p < s:
+        if s[p] != '\n' and s[p] != ' ':
+            n = 10 * n + int(s[p])
+        else:
+            yield n
+            n = 0
+        p += 1
+    yield n
 
 million = 1000 * 1000
 max_days = 75
@@ -20,29 +39,30 @@ lowest_price = 10
 
 t.mark("stdin.read() + splitlines()")
 content = stdin.read()
-lines=content.splitlines()
+#lines=content.splitlines()
+data = read_and_parse(content)
 
-N, D = map(int, lines[0].split())
-
+N, D = data.next(), data.next()
 t.mark("storing N data w try/catch")
-count_and_offset = {}
+count_and_offset = {0:0}
 t.mark("store N data with try/catch")
 for i in xrange(N):
-    value = int(lines[i + 1])
+    value = data.next()
     try:
         count_and_offset[value] += 1
     except KeyError:
         count_and_offset[value] = 1
-cprices = map(int, lines[N + 1:])
+#cprices = map(int, lines[N + 1:])
+cprices = [data.next() for i in xrange(D)]
 
 t.mark("precsan (1000001 items)")
-offset = 0;
-for i in xrange(million + 1):
-    if i in count_and_offset:
-            offset = 0;
-    else:
-        count_and_offset[i] = offset
-    offset -= 1
+# offset = 0;
+# for i in xrange(million + 1):
+#     if i in count_and_offset:
+#             offset = 0;
+#     else:
+#         count_and_offset[i] = offset
+#     offset -= 1
 
 t.mark("search algorithm")
 best_price = []
@@ -57,8 +77,9 @@ for day in xrange(D):
     larger = get_next_valid_lower(larger)
     while larger >= lowlimit and candidate != cp:
         smaller = cp - larger
-        if (count_and_offset[smaller] == 1 and smaller == larger):
-            smaller -= 1
+        if smaller in count_and_offset:
+            if (count_and_offset[smaller] == 1 and smaller == larger):
+                smaller -= 1
         smaller = get_next_valid_lower(smaller)
         if smaller < lowest_price:
             larger = get_next_valid_lower(larger - 1)
