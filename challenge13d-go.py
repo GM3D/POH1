@@ -2,14 +2,10 @@
 # using multiplicity and sorted price list.
 # multithreading cprice loop.
 
-import myprofiler
-t = myprofiler.ProfileTimer()
-t.mark("start")
-
 import threading
-from sys import stdin, stderr
+from sys import stdin
 lowest_price = 10
-threadnum = 2
+threadnum = 16
 
 def bisect_left(array, value):
     l = len(array)
@@ -64,10 +60,8 @@ def find_best_price(day):
         larger = prices[i]
     return candidate
 
-
-t.mark("file read")
 lines = stdin.read().splitlines()
-t.mark("store N data into dict and list")
+
 N, D = map(int, lines[0].split())
 prices = [0]
 multiplicity = {0:1}
@@ -79,14 +73,10 @@ for i in xrange(N):
         multiplicity[price] = 1
         prices.append(price)
 
-t.mark("store D data into list")
 cprices = map(int, lines[1 + N:])
 best_prices = [0] * D
 
-t.mark("sort N data")
 prices.sort()
-
-t.mark("main algorithm")
 
 if not threadnum:
     threadnum = D
@@ -101,9 +91,7 @@ for thread in threads:
 for thread in threads:
     thread.join()
 
-t.mark("print result")
 for day in xrange(D):
     print best_prices[day]
 
-t.mark("report")
-t.report()
+
