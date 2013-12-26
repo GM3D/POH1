@@ -3,7 +3,7 @@
 # multithreading cprice loop.
 
 import threading
-from sys import stdin
+import sys
 lowest_price = 10
 threadnum = 16
 
@@ -60,7 +60,7 @@ def find_best_price(day):
         larger = prices[i]
     return candidate
 
-lines = stdin.read().splitlines()
+lines = sys.stdin.read().splitlines()
 
 N, D = map(int, lines[0].split())
 prices = [0]
@@ -94,4 +94,5 @@ for thread in threads:
 for day in xrange(D):
     print best_prices[day]
 
+raise SystemExit
 

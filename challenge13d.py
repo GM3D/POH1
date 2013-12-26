@@ -7,7 +7,8 @@ t = myprofiler.ProfileTimer()
 t.mark("start")
 
 import threading
-from sys import stdin, stderr
+import sys
+
 lowest_price = 10
 threadnum = 2
 
@@ -66,7 +67,7 @@ def find_best_price(day):
 
 
 t.mark("file read")
-lines = stdin.read().splitlines()
+lines = sys.stdin.read().splitlines()
 t.mark("store N data into dict and list")
 N, D = map(int, lines[0].split())
 prices = [0]
@@ -107,3 +108,5 @@ for day in xrange(D):
 
 t.mark("report")
 t.report()
+
+sys.exit(0)
