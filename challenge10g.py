@@ -11,14 +11,21 @@ from sys import stdin
 
 def get_next_valid_lower(x):
     if x in count_and_offset:
-        return x
+        if count_and_offset[x] > 0:
+            return x
+        else:
+            return count_and_offset[x] + x
     else:
-        j = 0
-        while x + j not in count_and_offset and x + j > 0:
-            j -= 1
-        for k in xrange(-j):
-            count_and_offset[x + k] = -k
-        return x + j
+        j = 1
+        while x - j not in count_and_offset and x - j > 0:
+            j += 1
+        if count_and_offset[x - j] < 0:
+            d = count_and_offset[x - j]
+        else:
+            d = 0
+        for k in xrange(1, j + 1):
+            count_and_offset[x - j + k] = -k + d
+        return x - j + d
 
 million = 1000 * 1000
 max_days = 75

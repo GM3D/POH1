@@ -25,7 +25,7 @@ def read_and_parse(s):
     p = 0
     n = 0
     l = len(s)
-    while p < s:
+    while p < l:
         if s[p] != '\n' and s[p] != ' ':
             n = 10 * n + int(s[p])
         else:
