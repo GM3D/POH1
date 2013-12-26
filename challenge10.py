@@ -3,9 +3,11 @@
 from sys import stdin
 
 def get_next_valid_lower(x):
+    print "get_next_valid_lower(): x = ", x
     l = count_and_offset[x]
     if l < 0:
         x += l
+    print "return ", x
     return x
 
 million = 1000 * 1000
@@ -39,6 +41,7 @@ best_price = []
 for day in xrange(D):
     candidate = 0
     cp = cprices[day]
+    print "cp = ", cp
     if cp > 2 * lowest_price:
         lowlimit = cp / 2
     else:
@@ -46,15 +49,19 @@ for day in xrange(D):
     larger = cp - lowest_price
     larger = get_next_valid_lower(larger)
     while larger >= lowlimit and candidate != cp:
+        print "larger = ", larger
         smaller = cp - larger
         if (count_and_offset[smaller] == 1 and smaller == larger):
             smaller -= 1
         smaller = get_next_valid_lower(smaller)
+        print "smaller = ", smaller
         if smaller < lowest_price:
             larger = get_next_valid_lower(larger - 1)
             continue
+        print "smaller + larger = %d, candidate = %d" % (smaller + larger, candidate)
         if smaller + larger > candidate:
             candidate = smaller + larger
+            print "new candidate = ", candidate
         larger = get_next_valid_lower(larger - 1)
     best_price.append(candidate)
 
