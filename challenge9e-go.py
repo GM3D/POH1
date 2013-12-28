@@ -1,20 +1,26 @@
-# challenge 9e-go.py by GM3D ver 0.8
+# challenge 9e-go.py by GM3D ver 0.9
 # data: sorted list + dict, lookup: count and bisect
 # sorting prices separately.
 # sorting cprices.
 # adopting lowest price from actual data
 # ignoring prices that are larger than any of campaign price.
 # finding "exact" solutions first.
-# bisect_left <= linear search
+# bisect_left <= linear search with hint
 
 import sys
 
-def bisect_left(array, value):
-    l = len(array)
-    for i in xrange(l):
-        if array[i] >= value:
-            return i
-    return l
+def linear_search(array, value):
+    hint = l * (value - lowest_price) / (spread + 1)
+    if array[hint] < value:
+        for i in xrange(hint, l):
+            if array[i] >= value:
+                return i
+        return l
+    else:
+        for i in xrange(hint - 1, -1, -1):
+            if array[i] < value:
+                return i + 1
+        return 0
 
 sys.setcheckinterval(1000000)
 
@@ -29,9 +35,11 @@ def find_best_price(cp):
     else:
         lowlimit = lowest_price
     larger = cp - lowest_price
-    if larger < hard_lowest:
+    if larger > highest_price:
+        larger = highest_price
+    if larger < lowlimit:
         return candidate
-    i = bisect_left(prices, larger)
+    i = linear_search(prices, larger)
     if not larger in multiplicity:
         i -= 1
         larger = prices[i]
@@ -45,7 +53,7 @@ def find_best_price(cp):
         larger = prices[i]
     for larger in tentative_largers:
         smaller = cp - larger
-        smaller = prices[bisect_left(prices, smaller) - 1]
+        smaller = prices[linear_search(prices, smaller) - 1]
         if smaller < lowest_price:
             continue
         if smaller + larger > candidate:
@@ -74,6 +82,9 @@ for i in xrange(N):
 
 prices.sort()
 l = len(prices)
+lowest_price = prices[1]
+highest_price = prices[-1]
+spread = highest_price - lowest_price
 
 best_price = {}
 last_best = 1

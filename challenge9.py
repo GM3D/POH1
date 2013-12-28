@@ -36,7 +36,7 @@ def find_best_price(cp):
 lines=stdin.read().splitlines()
 N, D = map(int, lines[0].split())
 prices = [0]
-multiplicity = {0:1}
+multiplicity = {}
 for i in xrange(N):
     price = int(lines[1 + i])
     if price in multiplicity:
