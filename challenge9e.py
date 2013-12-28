@@ -1,4 +1,4 @@
-# challenge 9e.py by GM3D ver 0.8
+# challenge 9e.py by GM3D ver 0.9
 # data: sorted list + dict, lookup: count and bisect
 # sorting prices separately.
 # sorting cprices.
@@ -20,20 +20,15 @@ sys.setcheckinterval(1000000)
 
 def linear_search(array, value):
     hint = l * (value - lowest_price) / (spread + 1)
-    print "linear: value =%d, hint = %d" % (value, hint)
     if array[hint] < value:
         for i in xrange(hint, l):
             if array[i] >= value:
-                print "linear return (i)", i
                 return i
-        print "linear return (l)", l
         return l
     else:
         for i in xrange(hint - 1, -1, -1):
             if array[i] < value:
-                print "linear return (i+1)", i + 1
                 return i + 1
-        print "linear return (0)", 0
         return 0
 
 t.mark("defs")
@@ -41,6 +36,8 @@ t.mark("defs")
 hard_lowest = 10
 
 def find_best_price(cp):
+    if cp in cache:
+        return cp
     tentative_largers = []
     candidate = 0
     if cp > 2 * lowest_price:
@@ -69,6 +66,7 @@ def find_best_price(cp):
         smaller = prices[linear_search(prices, smaller) - 1]
         if smaller < lowest_price:
             continue
+        cache[smaller + larger] = 1
         if smaller + larger > candidate:
             candidate = smaller + larger
     return candidate
@@ -86,6 +84,7 @@ maxprice = cp_sorted[D - 1]
 t.mark("creating and filling dict and list")
 multiplicity = {}
 prices = [0]
+cache = {}
 
 for i in xrange(N):
     price = int(lines[1 + i])
