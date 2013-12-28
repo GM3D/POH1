@@ -1,5 +1,7 @@
-# challenge 9.py by GM3D ver 0.2
+# challenge 9.py by GM3D ver 0.3
 # data: sorted list + dict, lookup: count and bisect
+# self-defined insort
+
 from sys import stdin
 from bisect import bisect_left, insort
 
@@ -31,7 +33,7 @@ def find_best_price(cp):
         larger = prices[i]
     return candidate
 
-lines=stdin.readlines()
+lines=stdin.read().splitlines()
 N, D = map(int, lines[0].split())
 prices = [0]
 multiplicity = {0:1}
