@@ -1,6 +1,8 @@
-# challenge 9f.py by GM3D ver 0.3
+# challenge 9f.py by GM3D ver 0.5
 # data: sorted list + dict, lookup: count and bisect
 # incorporating limit value optimizations from challenge9e.py
+# searching optimal solutions first.
+# dict lookup by try-except
 
 from sys import stdin
 from bisect import bisect_left
@@ -8,7 +10,7 @@ from bisect import bisect_left
 hard_lowest = 10
 
 def find_best_price(cp):
-    candidate = 0
+    tentative_largers = []
     if cp > 2 * lowest_price:
         lowlimit = cp / 2
     else:
@@ -17,25 +19,36 @@ def find_best_price(cp):
     if larger > highest_price:
         larger = highest_price
     if larger < lowlimit:
-        return candidate
+        return 0
     i = bisect_left(prices, larger)
     if not larger in multiplicity:
         i -= 1
         larger = prices[i]
-    while larger >= lowlimit and candidate != cp:
+    while larger >= lowlimit:
         smaller = cp - larger
-        if (not smaller in multiplicity or \
-                (multiplicity[smaller] == 1 and cp == 2 * larger)):
-            smaller = prices[bisect_left(prices, smaller) - 1]
-        if smaller < lowest_price:
-            i -= 1
-            larger = prices[i]
-            continue
-        total = smaller + larger
-        if total > candidate:
-            candidate = total
+        try:
+            count = multiplicity[smaller]
+        except KeyError:
+            count = 0
+
+        if count  >= 2:
+            return cp
+        elif count  == 1:
+            if smaller != larger:
+                return cp
+
+        tentative_largers.append(larger)
         i -= 1
         larger = prices[i]
+
+    candidate = 0
+    for larger in tentative_largers:
+        smaller = cp - larger
+        smaller = prices[bisect_left(prices, smaller) - 1]
+        if smaller < lowest_price:
+            continue
+        if smaller + larger > candidate:
+            candidate = smaller + larger
     return candidate
 
 lines=stdin.read().splitlines()
