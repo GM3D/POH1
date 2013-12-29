@@ -91,11 +91,6 @@ prices = [0]
 for i in xrange(N):
     price = int(lines[1 + i])
     if price <= maxprice - hard_lowest:
-        # if price in multiplicity:
-        #     multiplicity[price] += 1
-        # else:
-        #     multiplicity[price] = 1
-        #     prices.append(price)
         x = multiplicity[price]
         if x == 0:
             multiplicity[price] += 1
