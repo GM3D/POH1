@@ -1,8 +1,9 @@
-# challenge 9f.py by GM3D ver 0.5
-# data: sorted list + dict, lookup: count and bisect
+# challenge 9f.py by GM3D ver 0.6
+# data: sorted list + bytearray, lookup: count and bisect
 # incorporating limit value optimizations from challenge9e.py
 # searching optimal solutions first.
 # dict lookup by try-except
+
 
 from sys import stdin
 from bisect import bisect_left
@@ -11,26 +12,17 @@ hard_lowest = 10
 
 def find_best_price(cp):
     tentative_largers = []
-    if cp > 2 * lowest_price:
-        lowlimit = cp / 2
-    else:
-        lowlimit = lowest_price
-    larger = cp - lowest_price
-    if larger > highest_price:
-        larger = highest_price
+    lowlimit = max(cp / 2, lowest_price)
+    larger = min(cp - lowest_price, highest_price)
     if larger < lowlimit:
         return 0
     i = bisect_left(prices, larger)
-    if not larger in multiplicity:
+    if not multiplicity[larger]:
         i -= 1
         larger = prices[i]
     while larger >= lowlimit:
         smaller = cp - larger
-        try:
-            count = multiplicity[smaller]
-        except KeyError:
-            count = 0
-
+        count = multiplicity[smaller]
         if count  >= 2:
             return cp
         elif count  == 1:
@@ -59,16 +51,17 @@ cp_sorted = sorted(cprices)
 maxprice = cp_sorted[- 1]
 
 prices = [0]
-multiplicity = {}
+multiplicity = bytearray(maxprice - hard_lowest + 1)
 
 for i in xrange(N):
     price = int(lines[1 + i])
     if price <= maxprice - hard_lowest:
-        if price in multiplicity:
+        x = multiplicity[price]
+        if x == 0:
             multiplicity[price] += 1
-        else:
-            multiplicity[price] = 1
             prices.append(price)
+        elif x == 1:
+            multiplicity[price] += 1
 
 prices.sort()
 l = len(prices)

@@ -1,5 +1,5 @@
 # challenge 9e.py by GM3D ver 1.0
-# data: sorted list + dict, lookup: count and bisect
+# data: sorted list + bytearray, lookup: count and bisect
 # sorting prices separately.
 # sorting cprices.
 # adopting lowest price from actual data
@@ -37,14 +37,9 @@ t.mark("defs")
 hard_lowest = 10
 
 def find_best_price(cp):
-    tentative_largers = []
-    if cp > 2 * lowest_price:
-        lowlimit = cp / 2
-    else:
-        lowlimit = lowest_price
-    larger = cp - lowest_price
-    if larger > highest_price:
-        larger = highest_price
+    tentative_largers.clear()
+    lowlimit = max(cp / 2, lowest_price)
+    larger = min(cp - lowest_price, highest_price)
     if larger < lowlimit:
         return 0
     i = linear_search(prices, larger)
@@ -60,7 +55,7 @@ def find_best_price(cp):
             if smaller != larger:
                 return cp
 
-        tentative_largers.append(larger)
+        tentative_largers.add(larger)
         i -= 1
         larger = prices[i]
 
@@ -99,10 +94,15 @@ for i in xrange(N):
         x = multiplicity[price]
         if x == 0:
             multiplicity[price] += 1
-            prices.append(price)
+#            prices.append(price)
         elif x == 1:
             multiplicity[price] += 1
 
+<<<<<<< HEAD
+=======
+prices = [0] + list(set([int(lines[1 + i]) for i in xrange(N)]))
+
+>>>>>>> 8d2bdead48d919f4eb5b49679efcde06f16a5938
 #multiplicity = memoryview(multiplicity)
 t.mark("sorting (maximally) N data")
 prices.sort()
@@ -115,6 +115,7 @@ t.mark("main algorithm + output")
 
 best_price = {}
 last_best = 1
+tentative_largers = set()
 
 counter0 = counter1 = counter2 = 0
 for c in reversed(cp_sorted):
