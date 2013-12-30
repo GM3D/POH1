@@ -1,0 +1,90 @@
+case 1
+test for N:
+704 ok
+705 ok
+720 ok
+701 ok
+700 ok
+699 ng
+698 ng
+695 ng
+690 ng
+688 ng
+test for D:
+
+case1: N = 700, D = 50
+case2: N = 13k, D = 50
+case3: N = 200k, D = 75
+
+DL = 30
+1: ok (more than 30)
+2: ok (more than 30)
+
+DL = 40
+1: ng (more than 40)
+
+DL = 45
+1: ng (more than 40)
+
+DL = 50
+1: ok (le 50)
+2: ok (le 50)
+3: ng
+
+NL = 10000
+1: ok (le 10000)
+2: ng (gt 10000)
+3. skipped
+
+NL = 12.5k
+1: ok (le 12.5k)
+2: ng (gt 12.5k)
+3: skipped
+
+NL=12999
+1: ok (le 12999)
+2: ng (gt 12999)
+3; skipped
+
+NL = 13k
+1: ok (le 13k)
+2: ok (le 13k)
+3: ng (gt 13k)
+
+NL = 14k
+1: ok (le 14k)
+2: ok (le 14k)
+3: ng (gt 14k)
+
+NL = 15k
+1: ok (le 15k)
+2: ok (le 15k)
+3: ng (gt 15k)
+
+NL = 20k
+1: ok (le 20k)
+2: ok (le 20k)
+3: ng (gt 20k)
+
+NL = 30k
+1: ok (le 30k)
+2: ok (le 30k)
+3: ng (gt 30k)
+
+NL = 50k
+ok (le 50k)
+ok (le 50k)
+ng (gt 50k)
+
+NL = 1e5
+1: ok (le 1e5)
+2: ok (le 1e5)
+3: ng (gt 1e5)
+
+NL = 150000
+1: ok (le 150k)
+2: ok (le 150k)
+3: ng (gt 150k)
+
+not denom >= 100
+not denom >= 10
