@@ -145,3 +145,10 @@ int main(int argc, char **argv)
   print_best_prices();
   return 0;
 }
+
+void solve()
+{
+  read_from_stdin();
+  find_best_prices();
+  print_best_prices();
+}
