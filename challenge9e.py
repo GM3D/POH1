@@ -103,7 +103,7 @@ for i in xrange(N):
         elif x == 1:
             multiplicity[price] += 1
 
-multiplicity = memoryview(multiplicity)
+#multiplicity = memoryview(multiplicity)
 t.mark("sorting (maximally) N data")
 prices.sort()
 l = len(prices)
