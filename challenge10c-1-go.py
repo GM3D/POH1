@@ -1,18 +1,13 @@
-# challenge10c.py ver 0.1
+# challenge10c-1-go.py ver 0.1
 # count_and_offset is list
 # with prescan.
 # base pure python impl.
 # separete count and itable.
 # count and itable ctypes and using malloc.
 
-import myprofiler
-t = myprofiler.ProfileTimer()
-
-t.mark("import")
 from sys import stdin
 from ctypes import CDLL, cast, byref, sizeof, addressof, pointer, POINTER, c_int, c_uint, c_ubyte, c_void_p, c_char_p, c_size_t, c_char
 
-t.mark("defs")
 million = 1000 * 1000
 max_days = 75
 hard_lowest = 10
@@ -49,16 +44,12 @@ def find_best_price(cp):
         larger = get_next_valid_lower(larger - 1)
     return candidate
 
-t.mark("libc initialization")
 libc = CDLL('libc.so.6')
 
-t.mark("file read")
 content = stdin.read()
 lines=content.splitlines()
 N, D = map(int, lines[0].split())
 
-t.mark("create itable list")
-sizeof_int = 4
 libc.malloc.argtypes = (c_size_t,)
 libc.malloc.restype = c_void_p
 libc.memset.argtypes = (c_void_p, c_ubyte, c_size_t)
@@ -78,16 +69,12 @@ idxb0 = cast(idxb0_vp, POINTER(c_ubyte))
 idxb1 = cast(idxb1_vp, POINTER(c_ubyte))
 idxb2 = cast(idxb2_vp, POINTER(c_ubyte))
 
-t.mark("count N data")
 for i in xrange(N):
     value = int(lines[i + 1])
     count[value] += 1
     mark[value] = 'x'
 
-t.mark("store campaing prices")
 m = map(int, lines[N + 1:])
-
-t.mark("prescan index table")
 
 ilast = 0
 ptr = libc.strchrnul(mark, ord('x'))
@@ -113,15 +100,12 @@ libc.memset(idxb0_vp + ilast + 1, idxb0[ilast], million - ilast)
 libc.memset(idxb1_vp + ilast + 1, idxb1[ilast], million - ilast)
 libc.memset(idxb2_vp + ilast + 1, idxb2[ilast], million - ilast)
 
-t.mark("main algorithm")
 best_price = []
 for day in xrange(D):
     best_price.append(find_best_price(m[day]))
 
-t.mark("print result")
 for day in xrange(D):
     print best_price[day]
     
-t.mark("report")
+    
 
-t.report()
