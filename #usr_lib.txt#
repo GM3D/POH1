@@ -1,0 +1,86 @@
+drwxr-xr-x 33 root root 4096 2013-01-29 22:50 .
+drwxr-xr-x 7 root root 4096 2013-01-29 22:50 ..
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 apt
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 compat-ld
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 ConsoleKit
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 coreutils
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 dpkg
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 gcc
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 gnupg
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 gold-ld
+drwxr-xr-x 8 root root 4096 2013-01-29 22:50 i386-linux-gnu
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 i486
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 i586
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 i686
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 klibc
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 ldscripts
+lrwxrwxrwx 1 root root 20 2013-01-30 00:06 libapt-inst.so.1.2 -> libapt-inst.so.1.2.0
+-rw-r--r-- 1 root root 73956 2013-01-29 22:50 libapt-inst.so.1.2.0
+lrwxrwxrwx 1 root root 20 2013-01-30 00:06 libapt-pkg.so.4.10 -> libapt-pkg.so.4.10.1
+-rw-r--r-- 1 root root 1040188 2013-01-29 22:50 libapt-pkg.so.4.10.1
+lrwxrwxrwx 1 root root 20 2013-01-30 00:06 libasprintf.so.0 -> libasprintf.so.0.0.0
+-rw-r--r-- 1 root root 5252 2013-01-29 22:50 libasprintf.so.0.0.0
+-rw-r--r-- 1 root root 1022360 2013-01-29 22:50 libbfd-2.22-system.so
+-rw-r--r-- 1 root root 102312 2013-01-29 22:50 libboost_iostreams.so.1.42.0
+-rw-r--r-- 1 root root 1410364 2013-01-29 22:50 libcrypto.so.0.9.8
+lrwxrwxrwx 1 root root 19 2013-01-30 00:06 libcwidget.so.3 -> libcwidget.so.3.0.0
+-rw-r--r-- 1 root root 781296 2013-01-29 22:50 libcwidget.so.3.0.0
+-rw-r--r-- 1 root root 1464988 2013-01-29 22:50 libdb-4.8.so
+-rw-r--r-- 1 root root 275510 2013-01-29 22:50 libdialog.a
+lrwxrwxrwx 1 root root 15 2013-01-30 00:06 libept.so.1 -> libept.so.1.0.4
+-rw-r--r-- 1 root root 332576 2013-01-29 22:50 libept.so.1.0.4
+lrwxrwxrwx 1 root root 14 2013-01-30 00:06 libform.so.5 -> libform.so.5.7
+-rw-r--r-- 1 root root 48596 2013-01-29 22:50 libform.so.5.7
+lrwxrwxrwx 1 root root 15 2013-01-30 00:06 libformw.so.5 -> libformw.so.5.7
+-rw-r--r-- 1 root root 53076 2013-01-29 22:50 libformw.so.5.7
+lrwxrwxrwx 1 root root 20 2013-01-30 00:06 libfreetype.so.6 -> libfreetype.so.6.6.0
+-rw-r--r-- 1 root root 485956 2013-01-29 22:50 libfreetype.so.6.6.0
+lrwxrwxrwx 1 root root 23 2013-01-30 00:06 libgdbm_compat.so.3 -> libgdbm_compat.so.3.0.0
+-rw-r--r-- 1 root root 6584 2013-01-29 22:50 libgdbm_compat.so.3.0.0
+lrwxrwxrwx 1 root root 16 2013-01-30 00:06 libgdbm.so.3 -> libgdbm.so.3.0.0
+-rw-r--r-- 1 root root 19788 2013-01-29 22:50 libgdbm.so.3.0.0
+lrwxrwxrwx 1 root root 16 2013-01-30 00:06 liblzma.so.2 -> liblzma.so.2.0.0
+-rw-r--r-- 1 root root 134000 2013-01-29 22:50 liblzma.so.2.0.0
+lrwxrwxrwx 1 root root 14 2013-01-30 00:06 libmenu.so.5 -> libmenu.so.5.7
+-rw-r--r-- 1 root root 24672 2013-01-29 22:50 libmenu.so.5.7
+lrwxrwxrwx 1 root root 15 2013-01-30 00:06 libmenuw.so.5 -> libmenuw.so.5.7
+-rw-r--r-- 1 root root 25248 2013-01-29 22:50 libmenuw.so.5.7
+lrwxrwxrwx 1 root root 18 2013-01-30 00:06 libnewt.so.0.52 -> libnewt.so.0.52.11
+-rw-r--r-- 1 root root 77020 2013-01-29 22:50 libnewt.so.0.52.11
+lrwxrwxrwx 1 root root 21 2013-01-30 00:06 libnfnetlink.so.0 -> libnfnetlink.so.0.2.0
+-rw-r--r-- 1 root root 21764 2013-01-29 22:50 libnfnetlink.so.0.2.0
+-rw-r--r-- 1 root root 581468 2013-01-29 22:50 libopcodes-2.22-system.so
+lrwxrwxrwx 1 root root 15 2013-01-30 00:06 libpanel.so.5 -> libpanel.so.5.7
+-rw-r--r-- 1 root root 10136 2013-01-29 22:50 libpanel.so.5.7
+lrwxrwxrwx 1 root root 16 2013-01-30 00:06 libpanelw.so.5 -> libpanelw.so.5.7
+-rw-r--r-- 1 root root 10140 2013-01-29 22:50 libpanelw.so.5.7
+lrwxrwxrwx 1 root root 15 2013-01-30 00:06 libpci.so.3 -> libpci.so.3.1.7
+-rw-r--r-- 1 root root 39112 2013-01-29 22:50 libpci.so.3.1.7
+lrwxrwxrwx 1 root root 20 2013-01-30 00:06 libsigc-2.0.so.0 -> libsigc-2.0.so.0.0.0
+-rw-r--r-- 1 root root 19284 2013-01-29 22:50 libsigc-2.0.so.0.0.0
+lrwxrwxrwx 1 root root 19 2013-01-30 00:06 libsqlite3.so.0 -> libsqlite3.so.0.8.6
+-rw-r--r-- 1 root root 573376 2013-01-29 22:50 libsqlite3.so.0.8.6
+-rw-r--r-- 1 root root 302040 2013-01-29 22:50 libssl.so.0.9.8
+lrwxrwxrwx 1 root root 20 2013-01-30 00:06 libusb-0.1.so.4 -> /lib/libusb-0.1.so.4
+lrwxrwxrwx 1 root root 19 2013-01-30 00:06 libxapian.so.22 -> libxapian.so.22.1.2
+-rw-r--r-- 1 root root 1946744 2013-01-29 22:50 libxapian.so.22.1.2
+lrwxrwxrwx 1 root root 15 2013-01-30 00:06 libz.so.1 -> libz.so.1.2.3.4
+-rw-r--r-- 1 root root 79980 2013-01-29 22:50 libz.so.1.2.3.4
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 locale
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 mime
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 perl
+drwxr-xr-x 5 root root 4096 2013-01-29 22:50 perl5
+drwxr-xr-x 4 root root 4096 2013-01-29 22:50 pm-utils
+-rwxr-xr-x 1 root root 9660 2013-01-29 22:50 pt_chown
+drwxr-xr-x 4 root root 4096 2013-01-29 22:50 pyshared
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 python2.4
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 python2.5
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 python2.6
+drwxr-xr-x 26 root root 20480 2013-01-29 22:50 python2.7
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 python3
+drwxr-xr-x 31 root root 4096 2013-01-29 22:50 python3.2
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 rsyslog
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 sse2
+drwxr-xr-x 3 root root 4096 2013-01-29 22:50 ssl
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 tc
+drwxr-xr-x 2 root root 4096 2013-01-29 22:50 valgrind
