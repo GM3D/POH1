@@ -106,6 +106,3 @@ for day in xrange(D):
 
 for day in xrange(D):
     print best_price[day]
-    
-    
-
