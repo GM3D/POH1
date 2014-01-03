@@ -3,6 +3,7 @@ import myprofiler
 t = myprofiler.ProfileTimer()
 t.mark("import")
 from collections import Counter
+from bisect import bisect_left
 import sys
 
 t.mark("defs")
@@ -13,31 +14,16 @@ hard_max_cp = million
 hard_min_p = 10
 hard_max_p = million
 
-def get_next_valid_lower(value):
-    if count[value]:
-        return value
-    else:
-        if idx[value]:
-            return idx[value]
-        else:
-            i = value - 1
-            d = 0
-            while not count[i] and not idx[i]:
-                i -= 1
-            if count[i]:
-                d = i
-            if idx[i]:
-                d = idx[i]
-            idx[i + 1:value + 1] = (value - i) * [d]
-            return d
-
 def find_best_price(cp):
     tentative_largers = []
     lowlimit = max(cp / 2, lowest_price)
     larger = min(cp - lowest_price, highest_price)
     if larger < lowlimit:
         return 0
-    larger = get_next_valid_lower(larger)
+    i = bisect_left(prices, larger)
+    if not count[larger]:
+        i -= 1
+        larger = prices[i]
     while larger >= lowlimit:
         smaller = cp - larger
         if count[smaller] >= 2:
@@ -46,10 +32,12 @@ def find_best_price(cp):
             if smaller != larger:
                 return cp
         tentative_largers.append(larger)
-        larger = get_next_valid_lower(larger - 1)
+        i -= 1
+        larger = prices[i]
     candidate = 0
     for larger in tentative_largers:
-        smaller = get_next_valid_lower(cp - larger -1)
+        i = bisect_left(prices, cp -larger) - 1
+        smaller = prices[i]
         if smaller + larger > candidate:
             candidate = smaller + larger
     return candidate
@@ -66,8 +54,9 @@ cp_max = cp_sorted[-1]
 t.mark("fill prices count")
 count = Counter((int(lines[1 + i]) for i in xrange(N)))
 count[0] = 1
-lowest_price = min(count.keys())
-highest_price = max(count.keys())
+prices = sorted(count.keys())
+lowest_price = prices[1]
+highest_price = prices[-1]
 
 t.mark("create idx table")
 idx = [0] * (hard_max_p + 1)
