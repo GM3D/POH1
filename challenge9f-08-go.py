@@ -9,7 +9,6 @@ hard_max_cp = million
 hard_min_p = 10
 hard_max_p = million
 
-@profile
 def find_best_price(cp):
     tentative_largers = []
     lowlimit = max(cp / 2, lowest_price)
