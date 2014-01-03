@@ -58,9 +58,6 @@ prices = sorted(count.keys())
 lowest_price = prices[1]
 highest_price = prices[-1]
 
-t.mark("create idx table")
-idx = [0] * (hard_max_p + 1)
-
 t.mark("main algorithm")
 best_prices = [find_best_price(cprices[day]) for day in xrange(D)]
 
