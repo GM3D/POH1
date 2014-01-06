@@ -2,36 +2,36 @@ import myprofiler
 
 t = myprofiler.ProfileTimer()
 t.mark("import")
-from collections import Counter
 from bisect import bisect_left
 import sys
 
 t.mark("defs")
 million = int(1e6)
 max_days = 50
-hard_min_cp = 10
-hard_max_cp = million
-hard_min_p = 10
-hard_max_p = million
 
+@profile
 def find_best_price(cp):
+    global N, D, lines
+    global prices, cprices, count
+    global highest_price, lowest_price
     tentative_largers = []
     lowlimit = max(cp / 2, lowest_price)
     larger = min(cp - lowest_price, highest_price)
     if larger < lowlimit:
         return 0
     i = bisect_left(prices, larger)
-    if not count[larger]:
+    if not larger in count:
         i -= 1
         larger = prices[i]
     while larger >= lowlimit:
         smaller = cp - larger
-        if count[smaller] >= 2:
-            return cp
-        elif count[smaller] == 1:
-            if smaller != larger:
+        if smaller in count:
+            if count[smaller] >= 2:
                 return cp
-        tentative_largers.append(larger)
+            if count[smaller] == 1 and smaller != larger:
+                return cp
+        else:
+            tentative_largers.append(larger)
         i -= 1
         larger = prices[i]
     candidate = 0
@@ -42,28 +42,55 @@ def find_best_price(cp):
             candidate = smaller + larger
     return candidate
 
-t.mark("read data")
-lines = sys.stdin.read().splitlines()
-N, D = map(int, lines[0].split())
-t.mark("fill cprices")
-cprices = [int(lines[1 + N + i]) for i in xrange(D)]
-cp_sorted = sorted(cprices)
-cp_min = cp_sorted[0]
-cp_max = cp_sorted[-1]
+@profile
+def read_input():
+    global N, D, lines
+    lines = sys.stdin.read().splitlines()
+    N, D = map(int, lines[0].split())
 
-t.mark("fill prices count")
-count = Counter((int(lines[1 + i]) for i in xrange(N)))
-count[0] = 1
-prices = sorted(count.keys())
-lowest_price = prices[1]
-highest_price = prices[-1]
+def parse_cprices():
+    global N, D, lines
+    global prices, cprices, count
+    cprices = [int(lines[1 + N + i]) for i in xrange(D)]
+    cp_sorted = sorted(cprices)
+    cp_min = cp_sorted[0]
+    cp_max = cp_sorted[-1]
 
-t.mark("main algorithm")
-best_prices = [find_best_price(cprices[day]) for day in xrange(D)]
+@profile
+def parse_prices():
+    global N, D, lines
+    global prices, cprices, count
+    global highest_price, lowest_price
+    count = {0:1}
+    prices = []
+    for i in xrange(N):
+        price = int(lines[1 + i])
+        if price in count:
+            count[price] += 1
+        else:
+            count[price] = 1
+            prices.append(price)
+    prices.sort()
+    lowest_price = prices[0]
+    highest_price = prices[-1]
 
-t.mark("output")
-output = "\n".join(map(str, best_prices))
-print output
+@profile
+def main():
+    global N, D, lines
+    global prices, cprices, count
+    best_prices = [find_best_price(cprices[day]) for day in xrange(D)]
+    t.mark("output")
+    output = "\n".join(map(str, best_prices))
+    print output
 
-t.mark("report")
-t.report()
+if __name__ == '__main__':
+    t.mark("read data")
+    read_input()
+    t.mark("fill cprices")
+    parse_cprices()
+    t.mark("fill prices count")
+    parse_prices()
+    t.mark("main algorithm")
+    main()
+    t.mark("report")
+    t.report()
