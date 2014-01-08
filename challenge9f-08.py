@@ -7,9 +7,8 @@ import sys
 
 t.mark("defs")
 million = int(1e6)
-max_days = 50
+batch_size = 1000
 
-@profile
 def find_best_price(cp):
     global N, D, lines
     global prices, cprices, count
@@ -30,8 +29,7 @@ def find_best_price(cp):
                 return cp
             if count[smaller] == 1 and smaller != larger:
                 return cp
-        else:
-            tentative_largers.append(larger)
+        tentative_largers.append(larger)
         i -= 1
         larger = prices[i]
     candidate = 0
@@ -42,28 +40,12 @@ def find_best_price(cp):
             candidate = smaller + larger
     return candidate
 
-@profile
-def read_input():
-    global N, D, lines
-    lines = sys.stdin.read().splitlines()
-    N, D = map(int, lines[0].split())
-
-def parse_cprices():
-    global N, D, lines
-    global prices, cprices, count
-    cprices = [int(lines[1 + N + i]) for i in xrange(D)]
-    cp_sorted = sorted(cprices)
-    cp_min = cp_sorted[0]
-    cp_max = cp_sorted[-1]
-
-@profile
-def parse_prices():
+def parse_prices(start, n):
     global N, D, lines
     global prices, cprices, count
     global highest_price, lowest_price
-    count = {0:1}
     prices = []
-    for i in xrange(N):
+    for i in xrange(start, start + n):
         price = int(lines[1 + i])
         if price in count:
             count[price] += 1
@@ -74,23 +56,41 @@ def parse_prices():
     lowest_price = prices[0]
     highest_price = prices[-1]
 
-@profile
-def main():
-    global N, D, lines
-    global prices, cprices, count
-    best_prices = [find_best_price(cprices[day]) for day in xrange(D)]
+def solve():
+    global best_prices
+    start = 0
+    count = D
+    d, r = divmod(N, batch_size)
+    for i in xrange(d):
+        parse_prices(start, batch_size)
+        for day in xrange(D):
+            if best_prices[day] != cprices[day]:
+                x = find_best_price(cprices[day])
+                best_prices[day] = x
+                if x == cprices[day]:
+                    count -= 1
+        if count == 0:
+            return
+        start += batch_size
+    parse_prices(start, r)
+    for day in xrange(D):
+        if best_prices[day] != cprices[day]:
+            best_prices[day] = find_best_price(cprices[day])
+
+def output():
     t.mark("output")
     output = "\n".join(map(str, best_prices))
     print output
 
 if __name__ == '__main__':
-    t.mark("read data")
-    read_input()
-    t.mark("fill cprices")
-    parse_cprices()
-    t.mark("fill prices count")
-    parse_prices()
-    t.mark("main algorithm")
-    main()
-    t.mark("report")
-    t.report()
+    lines = sys.stdin.read().splitlines()
+    N, D = map(int, lines[0].split())
+    cprices = [int(lines[1 + N + i]) for i in xrange(D)]
+    cp_sorted = sorted(cprices)
+    cp_min = cp_sorted[0]
+    cp_max = cp_sorted[-1]
+    count = {0:1}
+    prices = []
+    best_prices = D * [0]
+    solve()
+    output()
