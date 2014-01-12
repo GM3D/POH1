@@ -3,12 +3,15 @@ import random
 import subprocess
 
 scripts = (['./challenge6-c'],
-           ['./challenge4c-cpp'])
+           ['python', 'challenge9f-09.py'])
+
+random.seed()
 
 def gen_data(N, D):
     data = "%d %d\n" % (N, D)
     k = random.randrange(5) + 1
-    pstep = 10 ** random.randrange(0, k)
+#    pstep = 10 ** random.randrange(0, k)
+    pstep = 1
     for i in xrange(N):
         price = random.randrange(10, 1000001, pstep)
         data += "%d\n" % price
@@ -17,17 +20,28 @@ def gen_data(N, D):
         data += "%d\n" % cprice
     return data
 
-def compare_outputs(output):
+def compare_outputs(output, data, k):
     o1 = output[0].split('\n')
     o2 = output[1].split('\n')
     # print "output[0]:\n", output[0]
     # print "output[1]:\n", output[1]
     for i in xrange(len(o1)):
-        try:
-            assert o1[i] == o2[i]
-        except AssertionError:
+        if not o1[i] == o2[i]:
             print "i = %s, o1[i] = %s, o2[i] = %s" % (i, o1[i], o2[i])
-
+            inputs = data.splitlines()
+            N, D = map(int, inputs[0].split())
+            price_data = inputs[1:N + 1]
+            cprice_data = inputs[N + 1 + i]
+            header = "%d %d\n" % (N, 1)
+            error_data = header + "\n".join(price_data)
+            error_data.join("\n" + cprice_data + "\n")
+            print error_data
+            f = open("error_data_%d.txt" % k, "wt")
+            f.write(error_data)
+            f.close()
+            return False
+    return True
+            
 #countmax = 1
 countmax = 10
 
@@ -67,4 +81,7 @@ for count in xrange(countmax):
                 print "Child process output:" + str(child_output)
                 p.terminate()
             output.append(copy.deepcopy(child_output))
-        compare_outputs(output)
+        if not compare_outputs(output, data, k):
+            print "outputs differ on k = %d, N = %d" % (k, N)
+            print "test data written into error_data_%d.txt" % k
+            exit()
