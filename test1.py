@@ -3,7 +3,7 @@ import random
 import subprocess
 
 scripts = (['./challenge6-c'],
-           ['python', 'challenge9f-09.py'])
+           ['python', 'challenge9f-10.py'])
 
 random.seed()
 
