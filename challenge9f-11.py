@@ -2,16 +2,16 @@ import bisect
 import sys
 import itertools
 
+sys.setcheckinterval(100000)
+
 batch_size = 15000
 
 N = 0
 D = 0
-prices = [0]
-total_prices = [0]
+prices = None
 cprices = []
 best_prices = []
 tentative_largers = {}
-lines = []
 
 int_ = int
 len_ = len
@@ -19,13 +19,14 @@ bisect_left = bisect.bisect_left
 bisect_right = bisect.bisect_right
 imap = itertools.imap
 islice = itertools.islice
+repeat = itertools.repeat
 split = str.split
 append = list.append
+extend = list.extend
+sort = list.sort
 
 def find_optimal_price(cp):
     l = []
-    lowest_price = prices[1]
-    highest_price = prices[-1]
     lowlimit = max(cp / 2, lowest_price)
     larger = min(cp - lowest_price, highest_price)
     if larger < lowlimit:
@@ -46,8 +47,6 @@ def find_optimal_price(cp):
     return None
 
 def find_suboptimal_price(cp):
-    lowest_price = prices[1]
-    highest_price = prices[-1]
     l = tentative_largers[cp]
     candidate = 0
     last_larger = 0
@@ -68,22 +67,32 @@ def find_best_price(cp):
     else:
         return find_suboptimal_price(cp)
 
-def parse_prices(start, n):
-    global prices
-    l = imap(myint, islice(lines, 1 + start, 1 + start + n))
-    prices += l
+#@profile
+def parse_prices(body, n):
+    global prices, lowest_price, highest_price
+    lines = split(body, '\n', n)
+    l = imap(int_, lines[:-1], repeat(10))
+    if not prices:
+       prices = list(l)
+       prices.append(0)
+    else:
+       extend(prices, l)
     prices.sort()
+    lowest_price = prices[1]
+    highest_price = prices[-1]
+    return lines[-1]
 
 def parse_cprices():
     global cprices
-    cprices = tuple(imap(myint, islice(lines, 1 + N, 1 + N + D)))
+    lines = content.rsplit('\n', D)
+    cprices = tuple(imap(int_, lines[1:]))
 
 def solve():
-    start = 0
+    global body
     count = D
     d, r = divmod(N, batch_size)
     for i in xrange(d):
-        parse_prices(start, batch_size)
+        body = parse_prices(body, batch_size)
         for day in xrange(D):
             if best_prices[day] != cprices[day]:
                 x = find_best_price(cprices[day])
@@ -92,24 +101,26 @@ def solve():
                     count -= 1
         if count == 0:
             return
-        start += batch_size
     if r:
-        parse_prices(start, r)
-    for day in xrange(D):
-        if best_prices[day] != cprices[day]:
-            best_prices[day] = find_best_price(cprices[day])
+        parse_prices(body, r)
+        for day in xrange(D):
+            if best_prices[day] != cprices[day]:
+                best_prices[day] = find_best_price(cprices[day])
 
 
 def output():
     output = "\n".join(map(str, best_prices))
     print output
 
-
-def myint(s):
-    return int_(s, 10)
-
-lines = split(sys.stdin.read().rstrip(), '\n')
-N, D = imap(myint, split(lines[0]))
+# buffer = bytearray(8 * (200000 + 75) + 11)
+# bytes = sys.stdin.readinto(buffer)
+# buffer[bytes] = 0
+#content = buffer[:bytes].rstrip()
+#content = str(buffer).rstrip()
+content = sys.stdin.read().rstrip()
+s_content = split(content, '\n', 1)
+N, D = imap(int_, s_content[0].split())
+body = s_content[-1]
 best_prices = D * [0]
 parse_cprices()
 solve()
