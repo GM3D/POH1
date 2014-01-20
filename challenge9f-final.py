@@ -36,7 +36,7 @@ def find_optimal_price(cp):
     while larger >= lowlimit:
         smaller = cp - larger
         j = bisect_left(prices, smaller)
-        if prices[j] != smaller or (prices[j] == smaller and smaller == larger):
+        if prices[j] != smaller or (prices[j] == smaller and i == j):
             append(l, larger)
             i -= 1
             larger = prices[i]
